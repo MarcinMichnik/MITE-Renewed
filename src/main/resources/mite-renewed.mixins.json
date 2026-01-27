@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "miterenewed.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"HungerManagerMixin",
+		"PlayerSprintMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

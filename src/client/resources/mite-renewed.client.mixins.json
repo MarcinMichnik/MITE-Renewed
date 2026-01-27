@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "miterenewed.mixin.client",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"HungerHudMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
