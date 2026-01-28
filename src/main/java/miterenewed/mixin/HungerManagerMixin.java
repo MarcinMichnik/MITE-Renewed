@@ -1,6 +1,5 @@
 package miterenewed.mixin;
 
-import miterenewed.ModConstants;
 import miterenewed.ProgressionHelpers;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -15,7 +14,7 @@ public class HungerManagerMixin {
 	@Shadow private int foodLevel;
 
 	@Inject(method = "add", at = @At("HEAD"), cancellable = true)
-	private void miterenewed$limitHunger(int food, float saturation, CallbackInfo ci) {
+	private void limitHunger(int food, float saturation, CallbackInfo ci) {
 		if (!((Object) this instanceof ServerPlayerEntity player)) return;
 
 		int maxFood = ProgressionHelpers.getMaxFoodLevel(player);

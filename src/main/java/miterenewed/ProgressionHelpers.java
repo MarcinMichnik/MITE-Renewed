@@ -7,4 +7,5 @@ public class ProgressionHelpers {
         int bonus = player.experienceLevel / ModConstants.LEVELS_PER_UPGRADE;
         return (ModConstants.BASE_HUNGER + bonus) * 2;
     }
+
 }

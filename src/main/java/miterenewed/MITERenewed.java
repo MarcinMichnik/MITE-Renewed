@@ -38,4 +38,5 @@ public class MITERenewed implements ModInitializer {
         server.getOverworld().getGameRules()
 			.setValue(GameRules.NATURAL_HEALTH_REGENERATION, false, server);
 	}
+
 }

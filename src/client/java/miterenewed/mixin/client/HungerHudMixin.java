@@ -10,8 +10,9 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(InGameHud.class)
 public class HungerHudMixin {
+
     @ModifyConstant(method = "renderFood", constant = @Constant(intValue = 10))
-    private int miterenewed$capHungerBars(int value) {
+    private int capHungerBars(int value) {
         ClientPlayerEntity player = net.minecraft.client.MinecraftClient.getInstance().player;
         if (player == null) return MathHelper.ceil(value);
 

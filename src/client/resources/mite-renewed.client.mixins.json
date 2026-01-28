@@ -3,7 +3,8 @@
 	"package": "miterenewed.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"HungerHudMixin"
+		"HungerHudMixin",
+		"SprintToggleMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
