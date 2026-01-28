@@ -4,7 +4,9 @@
 	"compatibilityLevel": "JAVA_21",
 	"client": [
 		"HungerHudMixin",
-		"SprintToggleMixin"
+		"SprintToggleMixin",
+		"ZoomMixin",
+		"MouseSensitivityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

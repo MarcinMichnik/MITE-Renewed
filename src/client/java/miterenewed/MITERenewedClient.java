@@ -7,6 +7,7 @@ public class MITERenewedClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		ModKeyBindings.register();
 		SprintToggle.getSprintToggle().registerSprintToggle();
+		ZoomToggle.getZoomToggle().registerZoomToggle();
 	}
 
 }
