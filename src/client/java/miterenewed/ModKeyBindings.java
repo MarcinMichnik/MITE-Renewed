@@ -9,6 +9,8 @@ public class ModKeyBindings {
     public static KeyMapping TOGGLE_SPRINT;
     public static KeyMapping ZOOM_KEY;
 
+    public static KeyMapping AUTO_MINE_TOGGLE;
+
     public static void register() {
         TOGGLE_SPRINT = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "key.miterenewed.toggle_sprint",      // translation key
@@ -18,10 +20,17 @@ public class ModKeyBindings {
         ));
 
         ZOOM_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-                "key.yourmod.zoom",
+                "key.miterenewed.zoom",
                 InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_Z,
-                KeyMapping.Category.MOVEMENT
+                KeyMapping.Category.GAMEPLAY
+        ));
+
+        AUTO_MINE_TOGGLE = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+                "key.miterenewed.auto_mine_toggle",
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_GRAVE_ACCENT, // Default: ` key
+                KeyMapping.Category.GAMEPLAY
         ));
     }
 }
