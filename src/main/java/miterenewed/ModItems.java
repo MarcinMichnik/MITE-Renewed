@@ -1,15 +1,15 @@
 package miterenewed;
 
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ToolMaterial;
 
 public class ModItems {
 
@@ -21,7 +21,7 @@ public class ModItems {
             2.0F,    // Mining Speed
             1.0F,    // Attack Damage
             5,       // Enchantability
-            TagKey.of(RegistryKeys.ITEM, Identifier.of("minecraft", "flint")) // Repair item
+            TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("minecraft", "flint")) // Repair item
     );
 
     public static Item FLINT_HATCHET;
@@ -32,13 +32,13 @@ public class ModItems {
     }
 
     private static void registerFlintHatchet() {
-        Identifier id = Identifier.of(MOD_ID, "flint_hatchet");
-        RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
-        AxeItem flintHatchet = new AxeItem(FLINT_TOOL_MATERIAL, 3.0F, -3.0F, new Item.Settings()
-            .maxDamage(32)
-            .useItemPrefixedTranslationKey()
-            .registryKey(key));
-        FLINT_HATCHET = Registry.register(Registries.ITEM, key, flintHatchet);
+        Identifier id = Identifier.fromNamespaceAndPath(MOD_ID, "flint_hatchet");
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
+        AxeItem flintHatchet = new AxeItem(FLINT_TOOL_MATERIAL, 3.0F, -3.0F, new Item.Properties()
+            .durability(32)
+            .useItemDescriptionPrefix()
+            .setId(key));
+        FLINT_HATCHET = Registry.register(BuiltInRegistries.ITEM, key, flintHatchet);
     }
 
 }

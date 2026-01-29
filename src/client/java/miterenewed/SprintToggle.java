@@ -1,7 +1,7 @@
 package miterenewed;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.player.LocalPlayer;
 
 public final class SprintToggle {
     private static boolean isToggleEnabled = false;
@@ -21,12 +21,11 @@ public final class SprintToggle {
             if (client.player == null) return;
 
             boolean wasToggleEnabled = isToggleEnabled();
-            while (ModKeyBindings.TOGGLE_SPRINT.wasPressed()) {
+            while (ModKeyBindings.TOGGLE_SPRINT.consumeClick()) {
                 isToggleEnabled = !isToggleEnabled;
             }
-            ClientPlayerEntity player = client.player;
-            boolean canSprint = player.getHungerManager().getFoodLevel() > 1;
-            if (isToggleEnabled && canSprint) {
+            LocalPlayer player = client.player;
+            if (isToggleEnabled && player.canSprint()) {
                 client.player.setSprinting(true);
             } else if (wasToggleEnabled) {
                 client.player.setSprinting(false);

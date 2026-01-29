@@ -20,7 +20,7 @@ public final class ZoomToggle {
             if (client.player == null) return;
 
             boolean wasToggleEnabled = isZoomToggleEnabled();
-            while (ModKeyBindings.ZOOM_KEY.wasPressed()) {
+            while (ModKeyBindings.ZOOM_KEY.consumeClick()) {
                 isZoomToggleEnabled = !isZoomToggleEnabled;
             }
         });

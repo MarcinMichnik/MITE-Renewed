@@ -1,27 +1,27 @@
 package miterenewed;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
 public class ModKeyBindings {
-    public static KeyBinding TOGGLE_SPRINT;
-    public static KeyBinding ZOOM_KEY;
+    public static KeyMapping TOGGLE_SPRINT;
+    public static KeyMapping ZOOM_KEY;
 
     public static void register() {
-        TOGGLE_SPRINT = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        TOGGLE_SPRINT = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "key.miterenewed.toggle_sprint",      // translation key
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_TAB,                // TAB key
-                KeyBinding.Category.MOVEMENT
+                KeyMapping.Category.MOVEMENT
         ));
 
-        ZOOM_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        ZOOM_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "key.yourmod.zoom",
-                InputUtil.Type.KEYSYM,
+                InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_Z,
-                KeyBinding.Category.MOVEMENT
+                KeyMapping.Category.MOVEMENT
         ));
     }
 }

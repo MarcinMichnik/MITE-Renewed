@@ -1,33 +1,33 @@
 package miterenewed.mixin;
 
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(AbstractBlock.AbstractBlockState.class)
+@Mixin(BlockBehaviour.BlockStateBase.class)
 public abstract class BlockHardnessMixin {
 
-    @Inject(method = "getHardness", at = @At("RETURN"), cancellable = true)
-    private void removeInstantMining(BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
+    @Inject(method = "getDestroySpeed", at = @At("RETURN"), cancellable = true)
+    private void removeInstantMining(BlockGetter world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
         float hardness = cir.getReturnValue();
         BlockState state = (BlockState) (Object) this;
 
         // 1. Allow Torches (and other utility blocks) to stay instant
-        if (state.isIn(BlockTags.WALL_POST_OVERRIDE) || state.isOf(Blocks.TORCH)
-                || state.isOf(Blocks.WALL_TORCH) || state.isIn(BlockTags.SMALL_FLOWERS)) {
+        if (state.is(BlockTags.WALL_POST_OVERRIDE) || state.is(Blocks.TORCH)
+                || state.is(Blocks.WALL_TORCH) || state.is(BlockTags.SMALL_FLOWERS)) {
             return;
         }
 
         // 2. If the block is normally instant (0.0), give it a bit of resistance
-        if (state.isOf(Blocks.SUGAR_CANE)) {
+        if (state.is(Blocks.SUGAR_CANE)) {
             cir.setReturnValue(0.25F);
             return;
         }

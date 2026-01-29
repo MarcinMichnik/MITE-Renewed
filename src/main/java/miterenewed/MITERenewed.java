@@ -6,7 +6,7 @@ import miterenewed.handlers.PlayerProgressionHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.rule.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +37,8 @@ public class MITERenewed implements ModInitializer {
 
 	private void onServerStarted(MinecraftServer server) {
 		// Disable vanilla health regen because the mod will have different rules for this
-        server.getOverworld().getGameRules()
-			.setValue(GameRules.NATURAL_HEALTH_REGENERATION, false, server);
+        server.overworld().getGameRules()
+			.set(GameRules.NATURAL_HEALTH_REGENERATION, false, server);
 	}
 
 }

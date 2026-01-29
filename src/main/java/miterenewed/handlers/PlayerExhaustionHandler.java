@@ -3,8 +3,7 @@ package miterenewed.handlers;
 import miterenewed.ModConstants;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-
+import net.minecraft.server.level.ServerPlayer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -16,21 +15,21 @@ public class PlayerExhaustionHandler {
         ServerTickEvents.END_SERVER_TICK.register(PlayerExhaustionHandler::applyExhaustionOnJump);
     }
     private static void applyPassiveExhaustion(MinecraftServer server) {
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (!player.isCreative() && !player.isSpectator()) {
-                player.getHungerManager().addExhaustion(ModConstants.PASSIVE_EXHAUSTION);
+                player.getFoodData().addExhaustion(ModConstants.PASSIVE_EXHAUSTION);
             }
         }
     }
 
     private static void applyExhaustionOnJump(MinecraftServer server) {
-        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-            boolean wasOnGround = WAS_ON_GROUND.getOrDefault(player.getUuid(), true);
-            boolean isOnGround = player.isOnGround();
-            if (wasOnGround && !isOnGround && player.getVelocity().y > 0.0) {
-                player.getHungerManager().addExhaustion(ModConstants.EXHAUSTION_ON_JUMP);
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            boolean wasOnGround = WAS_ON_GROUND.getOrDefault(player.getUUID(), true);
+            boolean isOnGround = player.onGround();
+            if (wasOnGround && !isOnGround && player.getDeltaMovement().y > 0.0) {
+                player.getFoodData().addExhaustion(ModConstants.EXHAUSTION_ON_JUMP);
             }
-            WAS_ON_GROUND.put(player.getUuid(), isOnGround);
+            WAS_ON_GROUND.put(player.getUUID(), isOnGround);
         }
     }
 
