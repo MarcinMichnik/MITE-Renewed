@@ -6,7 +6,8 @@
 		"HungerManagerMixin",
 		"PlayerSprintMixin",
 		"MiningSpeedLimiterMixin",
-		"BlockHardnessMixin"
+		"BlockHardnessMixin",
+		"LeafStickMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

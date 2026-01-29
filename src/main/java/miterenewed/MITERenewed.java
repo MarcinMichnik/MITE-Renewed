@@ -4,12 +4,11 @@ import miterenewed.handlers.PlayerExhaustionHandler;
 import miterenewed.handlers.PlayerHealthRegenHandler;
 import miterenewed.handlers.PlayerProgressionHandler;
 import net.fabricmc.api.ModInitializer;
-
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.rule.GameRules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.minecraft.server.MinecraftServer;
 
 public class MITERenewed implements ModInitializer {
 	public static final String MOD_ID = "mite-renewed";
@@ -26,12 +25,15 @@ public class MITERenewed implements ModInitializer {
 		// Proceed with mild caution.
 		LOGGER.info("Hello MITERenewed world!");
 
+		ModItems.registerModItems();
+
 		ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStarted);
 
 		PlayerProgressionHandler.init();
 		PlayerExhaustionHandler.init();
 		PlayerHealthRegenHandler.init();
 	}
+
 
 	private void onServerStarted(MinecraftServer server) {
 		// Disable vanilla health regen because the mod will have different rules for this

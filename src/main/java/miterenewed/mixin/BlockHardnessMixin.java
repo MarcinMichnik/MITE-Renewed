@@ -26,7 +26,11 @@ public abstract class BlockHardnessMixin {
             return;
         }
 
-        // 2. If the block is normally instant (0.0), give it a tiny bit of resistance
+        // 2. If the block is normally instant (0.0), give it a bit of resistance
+        if (state.isOf(Blocks.SUGAR_CANE)) {
+            cir.setReturnValue(0.25F);
+            return;
+        }
         if (hardness == 0.0F) {
             cir.setReturnValue(0.05F);
         }
