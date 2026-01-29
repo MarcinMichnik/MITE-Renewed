@@ -1,14 +1,10 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "F",
-    "S",
-    "S"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:stick",
+    "minecraft:flint",
+    "minecraft:stick"
   ],
-  "key": {
-    "F": { "item": "minecraft:flint" },
-    "S": { "item": "minecraft:stick" }
-  },
   "result": {
     "id": "mite-renewed:flint_hatchet",
     "count": 1
