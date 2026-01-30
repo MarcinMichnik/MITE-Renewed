@@ -16,24 +16,18 @@ public class AutoMineManager {
 
         if (player == null) return;
 
-        // Toggle on key press
-        boolean keyPressed = ModKeyBindings.AUTO_MINE_TOGGLE.isDown();
+        boolean keyPressed = mc.mouseHandler.isLeftPressed() && mc.mouseHandler.isRightPressed();
         if (keyPressed && !keyWasPressed) {
             autoMineActive = !autoMineActive;
             sendToggleMessage(player);
         }
 
         // Simulate holding left click when active
-        if (autoMineActive) {
-            // This ensures left click is "held" even if player releases mouse button
-            mc.options.keyAttack.setDown(true);
-        } else {
-
-            // Reset to normal behavior
-            mc.options.keyAttack.setDown(mc.mouseHandler.isLeftPressed());
+        if (!autoMineActive) {
             if (mc.level != null && keyWasPressed && mc.hitResult instanceof BlockHitResult blockHit) {
                 mc.level.destroyBlockProgress(mc.player.getId(), blockHit.getBlockPos(), -1);
                 if (mc.gameMode != null) {
+                    // Workaround to reset block destruction progress
                     mc.gameMode.startDestroyBlock(blockHit.getBlockPos(), blockHit.getDirection());
                 }
             }
@@ -44,6 +38,10 @@ public class AutoMineManager {
     private static void sendToggleMessage(LocalPlayer player) {
         String status = autoMineActive ? "§aON" : "§cOFF";
         player.displayClientMessage(Component.literal("Auto-mine: " + status), true);
+    }
+
+    public static boolean isAutoMineActive() {
+        return autoMineActive;
     }
 
 }

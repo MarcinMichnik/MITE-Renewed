@@ -6,7 +6,8 @@
 		"HungerHudMixin",
 		"SprintToggleMixin",
 		"ZoomMixin",
-		"MouseSensitivityMixin"
+		"MouseSensitivityMixin",
+		"KeyMappingMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

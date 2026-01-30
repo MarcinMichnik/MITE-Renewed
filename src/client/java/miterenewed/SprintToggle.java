@@ -2,6 +2,7 @@ package miterenewed;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 
 public final class SprintToggle {
     private static boolean isToggleEnabled = false;
@@ -23,6 +24,7 @@ public final class SprintToggle {
             boolean wasToggleEnabled = isToggleEnabled();
             while (ModKeyBindings.TOGGLE_SPRINT.consumeClick()) {
                 isToggleEnabled = !isToggleEnabled;
+                sendToggleMessage(client.player);
             }
             LocalPlayer player = client.player;
             if (isToggleEnabled && player.canSprint() && !player.isInShallowWater()) {
@@ -31,6 +33,11 @@ public final class SprintToggle {
                 client.player.setSprinting(false);
             }
         });
+    }
+
+    private static void sendToggleMessage(LocalPlayer player) {
+        String status = isToggleEnabled ? "§aON" : "§cOFF";
+        player.displayClientMessage(Component.literal("Auto-sprint: " + status), true);
     }
 
     public boolean isToggleEnabled() {
