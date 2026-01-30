@@ -9,7 +9,9 @@
 		"BlockHardnessMixin",
 		"LeafStickMixin",
 		"ModifyVanillaItemsMixin",
-		"SeedSatietyMixin"
+		"SeedSatietyMixin",
+		"ExperienceOrbMixin",
+		"MiningSpeedPerLevelMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

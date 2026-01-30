@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class BlockHardnessMixin {
 
     @Inject(method = "getDestroySpeed", at = @At("RETURN"), cancellable = true)
-    private void removeInstantMining(BlockGetter world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
+    private void removeInstantMining(BlockGetter blockGetter, BlockPos pos, CallbackInfoReturnable<Float> cir) {
         float hardness = cir.getReturnValue();
         BlockState state = (BlockState) (Object) this;
 
