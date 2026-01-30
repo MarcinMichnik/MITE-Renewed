@@ -9,6 +9,7 @@ public final class ModConstants {
     public static final int BASE_HEARTS = 3;
     public static final int BASE_HUNGER = 3;
     public static final int LEVELS_PER_UPGRADE = 5;
+    public static final int EXP_GAIN_SLOW_DOWN_RATE = 3; // Example: value 3 - exp gain is 3 times slower
 
     public static final int REGEN_INTERVAL_TICKS = 1500;
     public static final float REGEN_AMOUNT = 1.0F;
