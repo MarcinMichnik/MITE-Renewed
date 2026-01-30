@@ -17,8 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Block.class)
 public abstract class LeafStickMixin {
     @Inject(method = "playerDestroy", at = @At("HEAD"))
-    private void dropSticksOnLeafBreak(Level world, Player player, BlockPos pos, BlockState state, BlockEntity blockEntity, ItemStack tool, CallbackInfo ci) {
-        if (!world.isClientSide() && state.is(BlockTags.LEAVES)) {
+    private void dropSticksOnLeafBreak(Level world, Player player, BlockPos pos, BlockState state,
+                                       BlockEntity blockEntity, ItemStack tool, CallbackInfo ci) {
+        if (world.isClientSide()) return;
+
+        if (state.is(BlockTags.LEAVES)) {
             // 10% chance to drop a stick
             if (world.random.nextFloat() < 0.1f) {
                 Block.popResource(world, pos, new ItemStack(Items.STICK));
