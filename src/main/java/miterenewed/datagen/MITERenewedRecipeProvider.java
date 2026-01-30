@@ -21,10 +21,11 @@ public class MITERenewedRecipeProvider extends FabricRecipeProvider {
         return new RecipeProvider(registryLookup, exporter) {
             @Override
             public void buildRecipes() {
-                shapeless(RecipeCategory.COMBAT, ModItems.FLINT_HATCHET)
-                        .requires(Items.STICK, 2)
-                        .requires(Items.FLINT)
-                        // Create an advancement that gives you the recipe
+                shaped(RecipeCategory.COMBAT, ModItems.FLINT_HATCHET)
+                        .pattern("SF")
+                        .pattern("S ")
+                        .define('F', Items.FLINT)
+                        .define('S', Items.STICK)
                         .unlockedBy(getHasName(Items.FLINT), has(Items.FLINT))
                         .unlockedBy(getHasName(Items.STICK), has(Items.STICK))
                         .save(output);

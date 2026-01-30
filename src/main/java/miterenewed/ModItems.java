@@ -37,7 +37,7 @@ public class ModItems {
         Identifier id = Identifier.fromNamespaceAndPath(MOD_ID, "flint_hatchet");
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
         AxeItem flintHatchet = new AxeItem(FLINT_TOOL_MATERIAL, 3.0F, -3.0F, new Item.Properties()
-            .durability(16)
+            .durability(12)
             .useItemDescriptionPrefix()
             .setId(key));
         FLINT_HATCHET = Registry.register(BuiltInRegistries.ITEM, key, flintHatchet);
