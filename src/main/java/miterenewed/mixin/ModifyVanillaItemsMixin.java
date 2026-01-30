@@ -8,22 +8,26 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(Items.class)
-public class SeedFoodMixin {
+import java.util.Set;
 
+@Mixin(Items.class)
+public class ModifyVanillaItemsMixin {
     @ModifyVariable(
             method = "registerItem(Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Function;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;",
             at = @At("HEAD"),
             argsOnly = true
     )
-    private static Item.Properties injectSeedFood(Item.Properties properties, ResourceKey<Item> key) {
+    private static Item.Properties modifyVanillaItems(Item.Properties properties, ResourceKey<Item> key) {
+        Set<String> SEED_IDS = Set.of(
+                "wheat_seeds",
+                "pumpkin_seeds",
+                "melon_seeds",
+                "beetroot_seeds"
+        );
+
         // Check if the item being registered is one of our target seeds
         String fullName = key.identifier().getPath();
-        if (fullName.contains("wheat_seeds") ||
-                fullName.contains("pumpkin_seeds") ||
-                fullName.contains("melon_seeds") ||
-                fullName.contains("beetroot_seeds")) {
-
+        if (SEED_IDS.stream().anyMatch(fullName::contains)) {
             FoodProperties seedFood = new FoodProperties.Builder()
                     .nutrition(0)
                     .saturationModifier(0f) // Will be overwritten in SeedSatietyMixin

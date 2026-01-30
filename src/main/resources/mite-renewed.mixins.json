@@ -8,7 +8,7 @@
 		"MiningSpeedLimiterMixin",
 		"BlockHardnessMixin",
 		"LeafStickMixin",
-		"SeedFoodMixin",
+		"ModifyVanillaItemsMixin",
 		"SeedSatietyMixin"
 	],
 	"injectors": {

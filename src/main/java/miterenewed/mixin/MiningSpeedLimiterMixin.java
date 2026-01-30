@@ -4,6 +4,7 @@ package miterenewed.mixin;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,6 +25,14 @@ public abstract class MiningSpeedLimiterMixin {
                 cir.setReturnValue(0f);
                 return;
             }
+        }
+
+        if (player.getMainHandItem().is(Items.WOODEN_PICKAXE) ||
+                player.getMainHandItem().is(Items.WOODEN_AXE) ||
+                player.getMainHandItem().is(Items.STONE_PICKAXE) ||
+                player.getMainHandItem().is(Items.STONE_AXE)) {
+            cir.setReturnValue(0f);
+            return;
         }
 
         // 1. Check if the player is using an effective tool
