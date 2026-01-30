@@ -7,7 +7,9 @@
 		"PlayerSprintMixin",
 		"MiningSpeedLimiterMixin",
 		"BlockHardnessMixin",
-		"LeafStickMixin"
+		"LeafStickMixin",
+		"SeedFoodMixin",
+		"SeedSatietyMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
