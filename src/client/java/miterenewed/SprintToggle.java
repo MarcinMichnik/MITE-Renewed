@@ -25,7 +25,7 @@ public final class SprintToggle {
                 isToggleEnabled = !isToggleEnabled;
             }
             LocalPlayer player = client.player;
-            if (isToggleEnabled && player.canSprint()) {
+            if (isToggleEnabled && player.canSprint() && !player.isInShallowWater()) {
                 client.player.setSprinting(true);
             } else if (wasToggleEnabled) {
                 client.player.setSprinting(false);
