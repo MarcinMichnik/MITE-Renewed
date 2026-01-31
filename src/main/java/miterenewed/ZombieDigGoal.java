@@ -7,7 +7,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.zombie.Zombie;
-import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 
@@ -66,7 +66,7 @@ public class ZombieDigGoal extends Goal {
 
     @Override
     public void stop() {
-        mob.level().destroyBlockProgress(mob.getId(), target, 0);
+        mob.level().destroyBlockProgress(mob.getId(), target, -1);
         progress = 0;
         target = null;
         targetHardness = 0;
@@ -86,49 +86,43 @@ public class ZombieDigGoal extends Goal {
         BlockPos feetPos = mob.blockPosition();
         BlockPos headPos = feetPos.above();
         BlockPos belowFeetPos = feetPos.below();
-        Direction dir = mob.getDirection();
+
+        double dx = targetEntity.getX() - mob.getX();
+        double dz = targetEntity.getZ() - mob.getZ();
+        Direction dir;
+        if (Math.abs(dx) > Math.abs(dz)) {
+            dir = dx > 0 ? Direction.EAST : Direction.WEST;
+        } else {
+            dir = dz > 0 ? Direction.SOUTH : Direction.NORTH;
+        }
+
         BlockPos blockInFrontHead = headPos.relative(dir);
         BlockPos blockInFrontFeet = feetPos.relative(dir);
         BlockPos blockBelowFeet = belowFeetPos.relative(dir);
 
-        BlockState stateHead = mob.level().getBlockState(blockInFrontHead);
-        BlockState stateFeet = mob.level().getBlockState(blockInFrontFeet);
-        BlockState stateBelowFeet = mob.level().getBlockState(blockBelowFeet);
+        Level mobLevel = mob.level();
+        BlockState stateHead = mobLevel.getBlockState(blockInFrontHead);
+        BlockState stateFeet = mobLevel.getBlockState(blockInFrontFeet);
+        BlockState stateBelowFeet = mobLevel.getBlockState(blockBelowFeet);
 
-        // 1. Check for Doors (Instant Break)
-        if (instantDoorBreak && stateHead.getBlock() instanceof DoorBlock) {
-            if (stateHead.getDestroySpeed(mob.level(), blockInFrontHead) <= instantDoorBreakHardness) {
-                mob.level().destroyBlock(blockInFrontHead, dropBrokenBlocks);
-                return false;
-            }
+        boolean shouldDigAtHeadLevel = !stateHead.isAir() && stateHead.getShape(mobLevel, blockInFrontHead) != Shapes.empty();
+        boolean shouldDigAtFeetLevel = !stateFeet.isAir() && stateFeet.getShape(mobLevel, blockInFrontFeet) != Shapes.empty();
+        boolean shouldDigBelowFeetLevel = !stateBelowFeet.isAir() && stateBelowFeet.getShape(mobLevel, blockBelowFeet) != Shapes.empty();
+
+        float hardness = 2f;
+        if (shouldDigAtHeadLevel) {
+            target = blockInFrontHead;
+            hardness = stateHead.getDestroySpeed(mobLevel, target);
+        } else if (shouldDigAtFeetLevel) {
+            target = blockInFrontFeet;
+            hardness = stateFeet.getDestroySpeed(mobLevel, target);
+        } else if (shouldDigBelowFeetLevel) {
+            target = blockBelowFeet;
+            hardness = stateBelowFeet.getDestroySpeed(mobLevel, target);
         }
 
-        // 2. Check if the path is actually blocked
-        // If the block in front isn't air and isn't something we can walk through...
-        if (!stateHead.isAir() && stateHead.getShape(mob.level(), blockInFrontHead) != Shapes.empty()) {
-            target = blockInFrontHead;
-            float hardness = stateHead.getDestroySpeed(mob.level(), target);
-
+        if (shouldDigAtFeetLevel || shouldDigAtHeadLevel || shouldDigBelowFeetLevel) {
             if (hardness < 0 || hardness > maximumTargetHardness) return false;
-
-            this.targetHardness = hardness * 20;
-            this.ratio = 10.0f / this.targetHardness;
-            return true;
-        } else if (!stateFeet.isAir() && stateFeet.getShape(mob.level(), blockInFrontFeet) != Shapes.empty()) {
-            target = blockInFrontFeet;
-            float hardness = stateFeet.getDestroySpeed(mob.level(), target);
-
-            if (hardness < 0 || hardness > maximumTargetHardness) return false;
-
-            this.targetHardness = hardness * 20;
-            this.ratio = 10.0f / this.targetHardness;
-            return true;
-        } else if (!stateBelowFeet.isAir() && stateBelowFeet.getShape(mob.level(), blockBelowFeet) != Shapes.empty()) {
-            target = blockBelowFeet;
-            float hardness = stateBelowFeet.getDestroySpeed(mob.level(), target);
-
-            if (hardness < 0 || hardness > maximumTargetHardness) return false;
-
             this.targetHardness = hardness * 20;
             this.ratio = 10.0f / this.targetHardness;
             return true;
