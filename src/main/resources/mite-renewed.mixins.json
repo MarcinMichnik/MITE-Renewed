@@ -11,7 +11,8 @@
 		"ModifyVanillaItemsMixin",
 		"SeedSatietyMixin",
 		"ExperienceOrbMixin",
-		"MiningSpeedPerLevelMixin"
+		"MiningSpeedPerLevelMixin",
+		"SlowCropGrowthMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
