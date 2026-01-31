@@ -13,7 +13,8 @@
 		"ExperienceOrbMixin",
 		"MiningSpeedPerLevelMixin",
 		"SlowCropGrowthMixin",
-		"ZombieBehaviourMixin"
+		"ZombieBehaviourMixin",
+		"XRayTargetingMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
