@@ -35,12 +35,8 @@ public abstract class MiningSpeedLimiterMixin {
             return;
         }
 
-        // 1. Check if the player is using an effective tool
         boolean isEffective = player.getMainHandItem().isCorrectToolForDrops(block);
-
-        // 4x slower with the right tool; 10x slower with wrong tool or by hand
-        float modifier = isEffective ? 0.25f : 0.1f;
-
+        float modifier = isEffective ? 0.13f : 0.1f;
         cir.setReturnValue(originalSpeed * modifier);
     }
 }
