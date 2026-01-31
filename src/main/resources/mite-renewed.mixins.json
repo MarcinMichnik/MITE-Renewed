@@ -12,7 +12,8 @@
 		"SeedSatietyMixin",
 		"ExperienceOrbMixin",
 		"MiningSpeedPerLevelMixin",
-		"SlowCropGrowthMixin"
+		"SlowCropGrowthMixin",
+		"ZombieBehaviourMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

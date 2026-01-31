@@ -16,8 +16,8 @@ public class HungerHudMixin {
         LocalPlayer player = net.minecraft.client.Minecraft.getInstance().player;
         if (player == null) return Mth.ceil(value);
 
-        int maxFoodLevel = getMaxFoodLevel(player);
-        return maxFoodLevel / 2;
+        int maxFoodLevel = getMaxFoodLevel(player) / 2;
+        return Math.min(maxFoodLevel, 10);
     }
 
     private static int getMaxFoodLevel(LocalPlayer player) {

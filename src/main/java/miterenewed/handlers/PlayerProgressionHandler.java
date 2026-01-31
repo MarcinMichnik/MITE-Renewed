@@ -35,8 +35,8 @@ public class PlayerProgressionHandler {
         int hearts = ModConstants.BASE_HEARTS + bonus;
         int hunger = ModConstants.BASE_HUNGER + bonus;
 
-        applyHealth(player, hearts);
-        applyHunger(player, hunger);
+        applyHealth(player, Math.min(hearts, 10));
+        applyHunger(player, Math.min(hunger, 10));
     }
 
     private static void applyHealth(ServerPlayer player, int hearts) {
