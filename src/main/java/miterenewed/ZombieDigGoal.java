@@ -18,7 +18,7 @@ public class ZombieDigGoal extends Goal {
     private float progress;
     private float ratio;
 
-    public int maximumTargetHardness = 20;
+    public int maximumTargetHardness = 1;
     public float diggingProgressTick = 0.02f;
     public boolean dropBrokenBlocks = true;
     public boolean instantDoorBreak = true;
@@ -85,12 +85,15 @@ public class ZombieDigGoal extends Goal {
 
         BlockPos feetPos = mob.blockPosition();
         BlockPos headPos = feetPos.above();
+        BlockPos belowFeetPos = feetPos.below();
         Direction dir = mob.getDirection();
         BlockPos blockInFrontHead = headPos.relative(dir);
         BlockPos blockInFrontFeet = feetPos.relative(dir);
+        BlockPos blockBelowFeet = belowFeetPos.relative(dir);
 
         BlockState stateHead = mob.level().getBlockState(blockInFrontHead);
         BlockState stateFeet = mob.level().getBlockState(blockInFrontFeet);
+        BlockState stateBelowFeet = mob.level().getBlockState(blockBelowFeet);
 
         // 1. Check for Doors (Instant Break)
         if (instantDoorBreak && stateHead.getBlock() instanceof DoorBlock) {
@@ -114,6 +117,15 @@ public class ZombieDigGoal extends Goal {
         } else if (!stateFeet.isAir() && stateFeet.getShape(mob.level(), blockInFrontFeet) != Shapes.empty()) {
             target = blockInFrontFeet;
             float hardness = stateFeet.getDestroySpeed(mob.level(), target);
+
+            if (hardness < 0 || hardness > maximumTargetHardness) return false;
+
+            this.targetHardness = hardness * 20;
+            this.ratio = 10.0f / this.targetHardness;
+            return true;
+        } else if (!stateBelowFeet.isAir() && stateBelowFeet.getShape(mob.level(), blockBelowFeet) != Shapes.empty()) {
+            target = blockBelowFeet;
+            float hardness = stateBelowFeet.getDestroySpeed(mob.level(), target);
 
             if (hardness < 0 || hardness > maximumTargetHardness) return false;
 
