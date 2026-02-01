@@ -19,6 +19,6 @@ public abstract class ZombieBehaviourMixin extends Monster {
 
     @Inject(method = "addBehaviourGoals", at = @At("HEAD"))
     private void addDigGoal(CallbackInfo ci) {
-        this.goalSelector.addGoal(2, new ZombieDigGoal((Zombie)(Object)this));
+        this.goalSelector.addGoal(3, new ZombieDigGoal((Zombie)(Object)this));
     }
 }

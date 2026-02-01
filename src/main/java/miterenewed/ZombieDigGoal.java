@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 
@@ -18,11 +19,11 @@ public class ZombieDigGoal extends Goal {
     private float progress;
     private float ratio;
 
+    private Block targetBlock;
+
     public int maximumTargetHardness = 1;
     public float diggingProgressTick = 0.02f;
     public boolean dropBrokenBlocks = true;
-    public boolean instantDoorBreak = true;
-    public float instantDoorBreakHardness = 5f;
 
     private static final double REACH_DISTANCE_SQR = 4.0;
 
@@ -38,7 +39,15 @@ public class ZombieDigGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        if (target == null || mob == null) return false;
+        if (target == null || mob == null || targetBlock == null) return false;
+
+        Block currentBlock = mob.level().getBlockState(target).getBlock();
+        if (currentBlock != targetBlock) {
+            return false;
+        }
+
+        if (mob.hurtTime > 0) return false;
+
         double distSqr = mob.distanceToSqr(target.getX() + 0.5, target.getY() + 0.5, target.getZ() + 0.5);
         return distSqr <= REACH_DISTANCE_SQR && this.progress <= this.targetHardness;
     }
@@ -50,6 +59,17 @@ public class ZombieDigGoal extends Goal {
 
     @Override
     public void tick() {
+        if (target == null) return;
+
+        mob.getNavigation().stop();
+
+        LivingEntity targetEntity = mob.getTarget();
+        if (targetEntity != null) {
+            mob.getLookControl().setLookAt(targetEntity.getX() + 0.5, targetEntity.getY() + 0.5, targetEntity.getZ() + 0.5, 30.0F, 30.0F);
+        }
+
+        mob.getMoveControl().setWantedPosition(mob.getX(), mob.getY(), mob.getZ(), 0.0D);
+
         progress += diggingProgressTick;
 
         if (mob.tickCount % 10 == 0) {
@@ -77,11 +97,6 @@ public class ZombieDigGoal extends Goal {
     public boolean canUse() {
         LivingEntity targetEntity = mob.getTarget();
         if (targetEntity == null) return false;
-        if (!mob.getNavigation().isInProgress()) {
-            mob.getLookControl().setLookAt(targetEntity, 30.0F, 30.0F);
-            // This pushes the zombie toward the player's location even without a path
-            mob.getMoveControl().setWantedPosition(targetEntity.getX(), mob.getY(), targetEntity.getZ(), 1.0D);
-        }
 
         BlockPos feetPos = mob.blockPosition();
         BlockPos headPos = feetPos.above();
@@ -107,17 +122,22 @@ public class ZombieDigGoal extends Goal {
 
         boolean shouldDigAtHeadLevel = !stateHead.isAir() && stateHead.getShape(mobLevel, blockInFrontHead) != Shapes.empty();
         boolean shouldDigAtFeetLevel = !stateFeet.isAir() && stateFeet.getShape(mobLevel, blockInFrontFeet) != Shapes.empty();
-        boolean shouldDigBelowFeetLevel = !stateBelowFeet.isAir() && stateBelowFeet.getShape(mobLevel, blockBelowFeet) != Shapes.empty();
+        boolean shouldDigBelowFeetLevel = !stateBelowFeet.isAir() &&
+                stateBelowFeet.getShape(mobLevel, blockBelowFeet) != Shapes.empty() &&
+                targetEntity.getY() < mob.getY();
 
         float hardness = 2f;
         if (shouldDigAtHeadLevel) {
             target = blockInFrontHead;
+            this.targetBlock = mobLevel.getBlockState(target).getBlock();
             hardness = stateHead.getDestroySpeed(mobLevel, target);
         } else if (shouldDigAtFeetLevel) {
             target = blockInFrontFeet;
+            this.targetBlock = mobLevel.getBlockState(target).getBlock();
             hardness = stateFeet.getDestroySpeed(mobLevel, target);
         } else if (shouldDigBelowFeetLevel) {
             target = blockBelowFeet;
+            this.targetBlock = mobLevel.getBlockState(target).getBlock();
             hardness = stateBelowFeet.getDestroySpeed(mobLevel, target);
         }
 
