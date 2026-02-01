@@ -4,8 +4,10 @@ import miterenewed.handlers.PlayerExhaustionHandler;
 import miterenewed.handlers.PlayerHealthRegenHandler;
 import miterenewed.handlers.PlayerProgressionHandler;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.gamerules.GameRules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,12 @@ public class MITERenewed implements ModInitializer {
 		PlayerProgressionHandler.init();
 		PlayerExhaustionHandler.init();
 		PlayerHealthRegenHandler.init();
+
+		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+			if (entity instanceof Zombie zombie && zombie.isBaby()) {
+				zombie.setBaby(false);
+			}
+		});
 	}
 
 

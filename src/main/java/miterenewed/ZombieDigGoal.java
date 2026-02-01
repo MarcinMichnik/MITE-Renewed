@@ -57,17 +57,20 @@ public class ZombieDigGoal extends Goal {
 
             Direction dir = getDirectionToPlayer(mob, mob.getTarget());
             BlockPos feetInFront = mob.blockPosition().relative(dir);
-            BlockPos BelowFeetInFront = mob.blockPosition().below().relative(dir);
             BlockPos headInFront = mob.blockPosition().above().relative(dir);
             BlockPos aboveHeadInFront = mob.blockPosition().above().above().relative(dir);
 
             boolean pathIsClearInFront = mob.level().getBlockState(feetInFront).isAir() &&
                     mob.level().getBlockState(headInFront).isAir();
-            boolean pathIsClearInFrontAndAbove = mob.level().getBlockState(headInFront).isAir() &&
-                    mob.level().getBlockState(aboveHeadInFront).isAir();
-            boolean pathIsClearInFrontAndBelow = mob.level().getBlockState(feetInFront).isAir() &&
-                    mob.level().getBlockState(BelowFeetInFront).isAir();
-            if (pathIsClearInFront || pathIsClearInFrontAndAbove || pathIsClearInFrontAndBelow) {
+            boolean shouldJumpToAccessTarget = mob.level().getBlockState(headInFront).isAir() &&
+                    mob.level().getBlockState(mob.blockPosition().above().above()).isAir() &&
+                    mob.level().getBlockState(aboveHeadInFront).isAir() &&
+                    mob.getTarget().getY() > mob.getY();
+            boolean shouldDigDownwardsToAccessTarget = (!mob.level().getBlockState(feetInFront).isAir() ||
+                    !mob.level().getBlockState(mob.blockPosition().below()).isAir() ||
+                    !mob.level().getBlockState(mob.blockPosition().below().relative(dir)).isAir()) &&
+                    mob.getTarget().getY() < mob.getY();
+            if (pathIsClearInFront || (shouldJumpToAccessTarget && !shouldDigDownwardsToAccessTarget)) {
                 return false;
             }
         }
@@ -132,17 +135,20 @@ public class ZombieDigGoal extends Goal {
 
         Direction dir = getDirectionToPlayer(mob, mob.getTarget());
         BlockPos feetInFront = mob.blockPosition().relative(dir);
-        BlockPos BelowFeetInFront = mob.blockPosition().below().relative(dir);
         BlockPos headInFront = mob.blockPosition().above().relative(dir);
         BlockPos aboveHeadInFront = mob.blockPosition().above().above().relative(dir);
 
         boolean pathIsClearInFront = mob.level().getBlockState(feetInFront).isAir() &&
                 mob.level().getBlockState(headInFront).isAir();
-        boolean pathIsClearInFrontAndAbove = mob.level().getBlockState(headInFront).isAir() &&
-                mob.level().getBlockState(aboveHeadInFront).isAir();
-        boolean pathIsClearInFrontAndBelow = mob.level().getBlockState(feetInFront).isAir() &&
-                mob.level().getBlockState(BelowFeetInFront).isAir();
-        if (pathIsClearInFront || pathIsClearInFrontAndAbove || pathIsClearInFrontAndBelow) {
+        boolean shouldJumpToAccessTarget = mob.level().getBlockState(headInFront).isAir() &&
+                mob.level().getBlockState(mob.blockPosition().above().above()).isAir() &&
+                mob.level().getBlockState(aboveHeadInFront).isAir() &&
+                mob.getTarget().getY() > mob.getY();
+        boolean shouldDigDownwardsToAccessTarget = (!mob.level().getBlockState(feetInFront).isAir() ||
+                !mob.level().getBlockState(mob.blockPosition().below()).isAir() ||
+                !mob.level().getBlockState(mob.blockPosition().below().relative(dir)).isAir()) &&
+                mob.getTarget().getY() < mob.getY();
+        if (pathIsClearInFront || (shouldJumpToAccessTarget && !shouldDigDownwardsToAccessTarget)) {
             return false;
         }
 

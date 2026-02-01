@@ -30,4 +30,5 @@ public abstract class ZombieBehaviourMixin extends Monster {
                 wrappedGoal.getGoal() instanceof WaterAvoidingRandomStrollGoal
         );
     }
+
 }
