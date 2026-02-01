@@ -14,7 +14,9 @@
 		"MiningSpeedPerLevelMixin",
 		"SlowCropGrowthMixin",
 		"ZombieBehaviourMixin",
-		"XRayTargetingMixin"
+		"XRayTargetingMixin",
+		"ClearBreakProgressOnRemoveMixin",
+		"ZombieDigTracker"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -111,6 +111,9 @@ public class ZombieDigGoal extends Goal {
 
     @Override
     public void stop() {
+        if (mob instanceof DiggingMob diggingMob) {
+            diggingMob.setDiggingTarget(null);
+        }
         mob.level().destroyBlockProgress(mob.getId(), target, -1);
         progress = 0;
         target = null;
@@ -187,6 +190,9 @@ public class ZombieDigGoal extends Goal {
         }
 
         if (shouldDigAtFeetLevel || shouldDigAtHeadLevel || shouldDigBelowFeetLevel) {
+            if (mob instanceof DiggingMob diggingMob) {
+                diggingMob.setDiggingTarget(target);
+            }
             if (hardness < 0 || hardness > maximumTargetHardness) return false;
             this.targetHardness = hardness * 20;
             this.ratio = 10.0f / this.targetHardness;
