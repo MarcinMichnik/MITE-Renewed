@@ -10,6 +10,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.shapes.Shapes;
 
 public class ZombieDigGoal extends Goal {
@@ -22,7 +23,7 @@ public class ZombieDigGoal extends Goal {
     private Block targetBlock;
 
     public int maximumTargetHardness = 1;
-    public float diggingProgressTick = 0.02f;
+    public float diggingProgressTick = 0.03f;
     public boolean dropBrokenBlocks = true;
 
     private static final double REACH_DISTANCE_SQR = 4.0;
@@ -48,6 +49,29 @@ public class ZombieDigGoal extends Goal {
 
         if (mob.hurtTime > 0) return false;
 
+        if (mob.getTarget() != null) {
+            Path path = mob.getNavigation().createPath(mob.getTarget(), 0);
+            if (path != null && path.canReach()) {
+                return false;
+            }
+
+            Direction dir = getDirectionToPlayer(mob, mob.getTarget());
+            BlockPos feetInFront = mob.blockPosition().relative(dir);
+            BlockPos BelowFeetInFront = mob.blockPosition().below().relative(dir);
+            BlockPos headInFront = mob.blockPosition().above().relative(dir);
+            BlockPos aboveHeadInFront = mob.blockPosition().above().above().relative(dir);
+
+            boolean pathIsClearInFront = mob.level().getBlockState(feetInFront).isAir() &&
+                    mob.level().getBlockState(headInFront).isAir();
+            boolean pathIsClearInFrontAndAbove = mob.level().getBlockState(headInFront).isAir() &&
+                    mob.level().getBlockState(aboveHeadInFront).isAir();
+            boolean pathIsClearInFrontAndBelow = mob.level().getBlockState(feetInFront).isAir() &&
+                    mob.level().getBlockState(BelowFeetInFront).isAir();
+            if (pathIsClearInFront || pathIsClearInFrontAndAbove || pathIsClearInFrontAndBelow) {
+                return false;
+            }
+        }
+
         double distSqr = mob.distanceToSqr(target.getX() + 0.5, target.getY() + 0.5, target.getZ() + 0.5);
         return distSqr <= REACH_DISTANCE_SQR && this.progress <= this.targetHardness;
     }
@@ -61,18 +85,16 @@ public class ZombieDigGoal extends Goal {
     public void tick() {
         if (target == null) return;
 
-        mob.getNavigation().stop();
-
         LivingEntity targetEntity = mob.getTarget();
         if (targetEntity != null) {
+            mob.getNavigation().stop();
             mob.getLookControl().setLookAt(targetEntity.getX() + 0.5, targetEntity.getY() + 0.5, targetEntity.getZ() + 0.5, 30.0F, 30.0F);
+            mob.getMoveControl().setWantedPosition(targetEntity.getX(), targetEntity.getY(), targetEntity.getZ(), 0.0D);
         }
-
-        mob.getMoveControl().setWantedPosition(mob.getX(), mob.getY(), mob.getZ(), 0.0D);
 
         progress += diggingProgressTick;
 
-        if (mob.tickCount % 10 == 0) {
+        if (mob.tickCount % 5 == 0) {
             mob.swing(InteractionHand.MAIN_HAND);
         }
 
@@ -96,20 +118,37 @@ public class ZombieDigGoal extends Goal {
     @Override
     public boolean canUse() {
         LivingEntity targetEntity = mob.getTarget();
-        if (targetEntity == null) return false;
+        if (targetEntity == null) {
+            return false;
+        }
+        Path path = mob.getNavigation().createPath(mob.getTarget(), 0);
+
+        if (path != null) {
+            boolean canReach = path.canReach();
+            if (canReach) {
+                return false;
+            }
+        }
+
+        Direction dir = getDirectionToPlayer(mob, mob.getTarget());
+        BlockPos feetInFront = mob.blockPosition().relative(dir);
+        BlockPos BelowFeetInFront = mob.blockPosition().below().relative(dir);
+        BlockPos headInFront = mob.blockPosition().above().relative(dir);
+        BlockPos aboveHeadInFront = mob.blockPosition().above().above().relative(dir);
+
+        boolean pathIsClearInFront = mob.level().getBlockState(feetInFront).isAir() &&
+                mob.level().getBlockState(headInFront).isAir();
+        boolean pathIsClearInFrontAndAbove = mob.level().getBlockState(headInFront).isAir() &&
+                mob.level().getBlockState(aboveHeadInFront).isAir();
+        boolean pathIsClearInFrontAndBelow = mob.level().getBlockState(feetInFront).isAir() &&
+                mob.level().getBlockState(BelowFeetInFront).isAir();
+        if (pathIsClearInFront || pathIsClearInFrontAndAbove || pathIsClearInFrontAndBelow) {
+            return false;
+        }
 
         BlockPos feetPos = mob.blockPosition();
         BlockPos headPos = feetPos.above();
         BlockPos belowFeetPos = feetPos.below();
-
-        double dx = targetEntity.getX() - mob.getX();
-        double dz = targetEntity.getZ() - mob.getZ();
-        Direction dir;
-        if (Math.abs(dx) > Math.abs(dz)) {
-            dir = dx > 0 ? Direction.EAST : Direction.WEST;
-        } else {
-            dir = dz > 0 ? Direction.SOUTH : Direction.NORTH;
-        }
 
         BlockPos blockInFrontHead = headPos.relative(dir);
         BlockPos blockInFrontFeet = feetPos.relative(dir);
@@ -149,5 +188,12 @@ public class ZombieDigGoal extends Goal {
         }
 
         return false;
+    }
+
+    private Direction getDirectionToPlayer(Zombie mob, LivingEntity target) {
+        double dx = target.getX() - mob.getX();
+        double dy = target.getY() - mob.getY();
+        double dz = target.getZ() - mob.getZ();
+        return Direction.getApproximateNearest(dx, dy, dz);
     }
 }
