@@ -16,7 +16,8 @@
 		"ZombieBehaviourMixin",
 		"XRayTargetingMixin",
 		"ClearBreakProgressOnRemoveMixin",
-		"ZombieDigTracker"
+		"ZombieDigTracker",
+		"SweetBerryBushNerfMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
