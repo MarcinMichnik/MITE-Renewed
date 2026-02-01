@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:bone",
+          "name": "minecraft:string",
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -30,7 +30,7 @@
       "conditions": [
         {
           "condition": "minecraft:random_chance",
-          "chance": 0.2
+          "chance": 0.3
         }
       ]
     },
@@ -39,14 +39,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:arrow",
+          "name": "minecraft:spider_eye",
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
                 "min": 0,
-                "max": 2
+                "max": 1
               }
             },
             {
