@@ -8,7 +8,6 @@ public final class ModConstants {
     public static final int BASE_HEARTS = 3;
     public static final int BASE_HUNGER = 3;
     public static final int LEVELS_PER_UPGRADE = 5;
-    public static final int EXP_GAIN_SLOW_DOWN_RATE = 6; // Example: value 6 - exp gain is 6 times slower
     public static final float CROP_GROWTH_MODIFIER = 0.1f; // 0.1f = 10x slower; 1f = normal
     public static final int MIN_DISTANCE_VILLAGE_GENERATION = 1000;
     public static final int REGEN_INTERVAL_TICKS = 1500;

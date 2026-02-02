@@ -1,10 +1,10 @@
 {
-  "parent": "minecraft:story/mine_stone",
+  "parent": "minecraft:story/flint_hatchet_advancement",
   "display": {
     "icon": {
       "id": "minecraft:copper_pickaxe"
     },
-    "title": "Time To Mine!",
+    "title": "Time To Mine",
     "description": "It's flimsy and it wears down fast, but it's better than your fingernails",
     "frame": "task",
     "show_toast": true,

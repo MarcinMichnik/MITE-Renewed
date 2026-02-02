@@ -10,7 +10,6 @@
 		"LeafStickMixin",
 		"ModifyVanillaItemsMixin",
 		"SeedSatietyMixin",
-		"ExperienceOrbMixin",
 		"MiningSpeedPerLevelMixin",
 		"SlowCropGrowthMixin",
 		"ZombieBehaviourMixin",
@@ -18,7 +17,8 @@
 		"ClearBreakProgressOnRemoveMixin",
 		"ZombieDigTracker",
 		"SweetBerryBushNerfMixin",
-		"VillageGenerationLimiterMixin"
+		"VillageGenerationLimiterMixin",
+		"PassiveMobXpMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

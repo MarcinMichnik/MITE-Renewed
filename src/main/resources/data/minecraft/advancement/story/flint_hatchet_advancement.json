@@ -1,11 +1,11 @@
 {
-  "parent": "minecraft:story/stick_picker_advancement",
+  "parent": "minecraft:story/mine_stone",
   "display": {
     "icon": {
-      "id": "minecraft:flint"
+      "id": "mite-renewed:flint_hatchet"
     },
-    "title": "The Long Road",
-    "description": "Wooden tools are a myth",
+    "title": "Cutting Edge",
+    "description": "Trees don't stand a chance",
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
@@ -17,7 +17,7 @@
       "conditions": {
         "items": [
           {
-            "items": "minecraft:flint"
+            "items": "mite-renewed:flint_hatchet"
           }
         ]
       }
