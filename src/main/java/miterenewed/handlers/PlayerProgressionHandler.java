@@ -55,7 +55,9 @@ public class PlayerProgressionHandler {
         if (player.getFoodData().getFoodLevel() > maxFood) {
             player.getFoodData().setFoodLevel(maxFood);
         }
-        player.getFoodData().setSaturation(0.0F);
+        if (player.getFoodData().getSaturationLevel() > maxFood) {
+            player.getFoodData().setSaturation(maxFood);
+        }
     }
 
     private static void applyProgressionOnLevelUp(MinecraftServer server) {
