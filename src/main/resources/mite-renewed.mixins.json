@@ -18,7 +18,9 @@
 		"ZombieDigTracker",
 		"SweetBerryBushNerfMixin",
 		"VillageGenerationLimiterMixin",
-		"PassiveMobXpMixin"
+		"PassiveMobXpMixin",
+		"FastPanicMixin",
+		"LongPanicMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
