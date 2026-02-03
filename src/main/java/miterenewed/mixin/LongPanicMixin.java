@@ -2,6 +2,7 @@ package miterenewed.mixin;
 
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Mixin(PanicGoal.class)
@@ -45,6 +47,22 @@ public abstract class LongPanicMixin {
     @Inject(method = "stop", at = @At("TAIL"))
     private void onStop(CallbackInfo ci) {
         this.mite$totalPanicTicks = 0;
+    }
+
+    @Inject(method = "shouldPanic", at = @At("HEAD"), cancellable = true)
+    private void mite$allowCustomPanic(CallbackInfoReturnable<Boolean> cir) {
+        if (this.mob.isPanicking()) { return; }
+        AABB area = this.mob.getBoundingBox().inflate(15.0D, 5.0D, 15.0D);
+        List<PathfinderMob> neighbors = this.mob.level().getEntitiesOfClass(
+                PathfinderMob.class,
+                area,
+                entity -> entity != this.mob // Don't alert yourself
+        );
+        for (PathfinderMob neighbor : neighbors) {
+            if (neighbor.isPanicking()) {
+                cir.setReturnValue(true);
+            }
+        }
     }
 
 }
