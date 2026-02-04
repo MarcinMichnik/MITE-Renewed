@@ -20,7 +20,8 @@
 		"VillageGenerationLimiterMixin",
 		"PassiveMobXpMixin",
 		"FastPanicMixin",
-		"LongPanicMixin"
+		"LongPanicMixin",
+		"ResultContainerPickupLimiterMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
