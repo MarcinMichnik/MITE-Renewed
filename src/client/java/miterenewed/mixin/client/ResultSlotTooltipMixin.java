@@ -20,37 +20,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(AbstractContainerScreen.class)
-public abstract class MiteResultTooltipMixin {
+public abstract class ResultSlotTooltipMixin {
     @Shadow @Nullable protected Slot hoveredSlot;
 
     @Inject(method = "getTooltipFromContainerItem", at = @At("RETURN"))
     private void mite$addResultOnlyTooltip(ItemStack stack, CallbackInfoReturnable<List<Component>> cir) {
-        // 1. Check if we are actually hovering over a slot
-        if (this.hoveredSlot != null) {
+        if (this.hoveredSlot == null) return;
 
-            // 2. Identify if it's an output slot (Crafting, Smithing, Furnace, etc.)
-            boolean isOutput = this.hoveredSlot instanceof ResultSlot ||
-                    this.hoveredSlot.container instanceof ResultContainer;
+        boolean isOutput = this.hoveredSlot instanceof ResultSlot ||
+                this.hoveredSlot.container instanceof ResultContainer;
+        if (!isOutput) return;
 
-            if (isOutput) {
-                List<Component> tooltip = cir.getReturnValue();
-                int req = getRequiredLevel(stack);
+        List<Component> tooltip = cir.getReturnValue();
+        int req = getRequiredLevel(stack);
+        if (req > 0) {
+            LocalPlayer player = Minecraft.getInstance().player;
+            boolean met = player != null && player.experienceLevel >= req;
 
-                if (req > 0) {
-                    LocalPlayer player = Minecraft.getInstance().player;
-                    boolean met = player != null && player.experienceLevel >= req;
-                    
-                    tooltip.add(Component.empty());
+            tooltip.add(Component.empty());
 
-                    ChatFormatting color = met ? ChatFormatting.GREEN : ChatFormatting.RED;
-                    tooltip.add(Component.literal("⚒ FORGE KNOWLEDGE").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD));
-                    tooltip.add(Component.literal("Requires: Level " + req).withStyle(color));
+            ChatFormatting color = met ? ChatFormatting.GREEN : ChatFormatting.RED;
+            tooltip.add(Component.literal("⚒ FORGE KNOWLEDGE").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD));
+            tooltip.add(Component.literal("Requires: Level " + req).withStyle(color));
 
-                    if (!met) {
-                        tooltip.add(Component.literal("(!) Insufficient experience to craft")
-                                .withStyle(ChatFormatting.DARK_RED, ChatFormatting.ITALIC));
-                    }
-                }
+            if (!met) {
+                tooltip.add(Component.literal("(!) Insufficient level to craft or repair")
+                        .withStyle(ChatFormatting.DARK_RED, ChatFormatting.ITALIC));
             }
         }
     }
@@ -63,6 +58,7 @@ public abstract class MiteResultTooltipMixin {
             if (stack.getDisplayName().getString().toLowerCase().contains("diamond")) return 20;
             if (stack.getDisplayName().getString().toLowerCase().contains("gold")) return 12;
             if (stack.getDisplayName().getString().toLowerCase().contains("iron")) return 10;
+            if (stack.getDisplayName().getString().toLowerCase().contains("copper")) return 5;
         }
         return 0;
     }

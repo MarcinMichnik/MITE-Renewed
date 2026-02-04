@@ -8,7 +8,7 @@
 		"ZoomMixin",
 		"MouseSensitivityMixin",
 		"KeyMappingMixin",
-		"MiteResultTooltipMixin"
+		"ResultSlotTooltipMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
