@@ -50,7 +50,8 @@ public abstract class ResultSlotTooltipMixin {
             }
 
             if (!met) {
-                tooltip.add(Component.literal("(!) Insufficient level to craft or repair")
+                String craftOrRepair = isCraftingMenu || isSmithingMenu ? "craft" : "repair";
+                tooltip.add(Component.literal("(!) Insufficient level to " + craftOrRepair)
                         .withStyle(ChatFormatting.DARK_RED, ChatFormatting.ITALIC));
             }
         }
