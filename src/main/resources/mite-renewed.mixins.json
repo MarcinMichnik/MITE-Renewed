@@ -21,7 +21,9 @@
 		"PassiveMobXpMixin",
 		"FastPanicMixin",
 		"LongPanicMixin",
-		"ResultContainerPickupLimiterMixin"
+		"ResultContainerPickupLimiterMixin",
+		"ItemExperienceCostMixin",
+		"SmithingExperienceCostMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

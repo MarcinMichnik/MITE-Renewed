@@ -6,9 +6,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.inventory.ResultContainer;
-import net.minecraft.world.inventory.ResultSlot;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +22,7 @@ public abstract class ResultSlotTooltipMixin {
     @Shadow @Nullable protected Slot hoveredSlot;
 
     @Inject(method = "getTooltipFromContainerItem", at = @At("RETURN"))
-    private void mite$addResultOnlyTooltip(ItemStack stack, CallbackInfoReturnable<List<Component>> cir) {
+    private void addResultOnlyTooltip(ItemStack stack, CallbackInfoReturnable<List<Component>> cir) {
         if (this.hoveredSlot == null) return;
 
         boolean isOutput = this.hoveredSlot instanceof ResultSlot ||
@@ -40,8 +38,16 @@ public abstract class ResultSlotTooltipMixin {
             tooltip.add(Component.empty());
 
             ChatFormatting color = met ? ChatFormatting.GREEN : ChatFormatting.RED;
-            tooltip.add(Component.literal("⚒ FORGE KNOWLEDGE").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD));
+            tooltip.add(Component.literal("⚒ FORGE KNOWLEDGE").withStyle(ChatFormatting.GOLD));
             tooltip.add(Component.literal("Requires: Level " + req).withStyle(color));
+
+            AbstractContainerScreen screen = (AbstractContainerScreen)(Object)this;
+            boolean isCraftingMenu = screen.getMenu() instanceof CraftingMenu || screen.getMenu() instanceof InventoryMenu;
+            boolean isSmithingMenu = screen.getMenu() instanceof SmithingMenu;
+            if (isCraftingMenu || isSmithingMenu) {
+                tooltip.add(Component.literal("Crafting Cost: " + req * 4 + " Experience")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
 
             if (!met) {
                 tooltip.add(Component.literal("(!) Insufficient level to craft or repair")
