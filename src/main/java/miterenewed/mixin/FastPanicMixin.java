@@ -10,6 +10,6 @@ public abstract class FastPanicMixin {
 
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
     private static double boostPanicSpeed(double originalSpeed) {
-        return originalSpeed * 1.05;
+        return originalSpeed * 1.04;
     }
 }
