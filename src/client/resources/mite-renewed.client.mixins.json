@@ -9,9 +9,7 @@
 		"MouseSensitivityMixin",
 		"KeyMappingMixin",
 		"ResultSlotTooltipMixin",
-		"MiteRecipeBookTooltipMixin",
-		"TradeOfferButtonTooltipMixin",
-		"MerchantScreenAccessor"
+		"MiteRecipeBookTooltipMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
