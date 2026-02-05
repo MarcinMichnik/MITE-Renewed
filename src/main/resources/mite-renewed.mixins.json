@@ -23,7 +23,8 @@
 		"LongPanicMixin",
 		"ResultContainerPickupLimiterMixin",
 		"ItemExperienceCostMixin",
-		"SmithingExperienceCostMixin"
+		"SmithingExperienceCostMixin",
+		"MiteDamageTrackerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
