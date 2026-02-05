@@ -25,7 +25,8 @@
 		"ItemExperienceCostMixin",
 		"SmithingExperienceCostMixin",
 		"MiteDamageTrackerMixin",
-		"SlowSugarCaneMixin"
+		"SlowSugarCaneMixin",
+		"MiteTradeCostMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
