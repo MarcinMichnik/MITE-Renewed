@@ -29,7 +29,8 @@
 		"MiteTradeCostMixin",
 		"MerchantOfferNoExpMixin",
 		"MerchantSlotMixin",
-		"MerchantShiftClickGuardMixin"
+		"MerchantShiftClickGuardMixin",
+		"MerchantMenuAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

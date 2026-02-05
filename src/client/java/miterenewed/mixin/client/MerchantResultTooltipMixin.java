@@ -1,5 +1,7 @@
 package miterenewed.mixin.client;
 
+import miterenewed.ModConstants;
+import miterenewed.mixin.MerchantMenuAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -9,7 +11,10 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MerchantContainer;
+import net.minecraft.world.inventory.MerchantMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.trading.MerchantOffer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,30 +26,31 @@ import java.util.List;
 @Mixin(AbstractContainerScreen.class)
 public abstract class MerchantResultTooltipMixin {
 
-    @Inject(
-            method = "renderTooltip(Lnet/minecraft/client/gui/GuiGraphics;II)V",
-            at = @At("TAIL")
-    )
+    @Inject(method = "renderTooltip(Lnet/minecraft/client/gui/GuiGraphics;II)V", at = @At("TAIL"))
     private void mite$appendXpRequirement(GuiGraphics guiGraphics, int mouseX, int mouseY, CallbackInfo ci) {
         AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) (Object) this;
         Slot hoveredSlot = ((MerchantScreenAccessor) screen).getHoveredSlot();
 
-        if (screen instanceof MerchantScreen && hoveredSlot != null && hoveredSlot.getContainerSlot() == 2 && hoveredSlot.hasItem()) {
-            int totalCost = 50;
+        if (screen instanceof MerchantScreen merchantScreen && hoveredSlot != null
+                && hoveredSlot.getContainerSlot() == 2 && hoveredSlot.hasItem()) {
+            MerchantMenu menu = merchantScreen.getMenu();
+            MerchantContainer container = ((MerchantMenuAccessor) menu).getTradeContainer();
+            MerchantOffer offer = container.getActiveOffer();
+
+            if (offer == null) return;
+            Player player = Minecraft.getInstance().player;
+            int expCostPerUnit = offer.getXp() * ModConstants.TRADE_COST_MODIFIER;
 
             List<ClientTooltipComponent> tooltipData = new ArrayList<>();
 
-            tooltipData.add(ClientTooltipComponent.create(Component.empty().getVisualOrderText()));
-
-            Component title = Component.literal("⚒ KNOWLEDGE REQUIREMENT")
-                    .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
+            String headerText = "⚒ KNOWLEDGE REQUIREMENT";
+            Component title = Component.literal(headerText).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
             tooltipData.add(ClientTooltipComponent.create(title.getVisualOrderText()));
 
-            Player player = Minecraft.getInstance().player;
-            boolean canAfford = player != null && player.totalExperience >= totalCost;
+            boolean canAfford = player != null && player.totalExperience >= expCostPerUnit;
             ChatFormatting color = canAfford ? ChatFormatting.GREEN : ChatFormatting.RED;
 
-            Component costText = Component.literal("Total Cost: " + totalCost + " XP").withStyle(color);
+            Component costText = Component.literal("Cost Per Trade: " + expCostPerUnit + " XP").withStyle(color);
             tooltipData.add(ClientTooltipComponent.create(costText.getVisualOrderText()));
 
             if (!canAfford) {
