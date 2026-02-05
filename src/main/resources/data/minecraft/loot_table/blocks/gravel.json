@@ -27,11 +27,11 @@
                 {
                   "type": "minecraft:item",
                   "name": "minecraft:copper_nugget",
-                  "weight": 5
+                  "weight": 10
                 },
                 {
                   "type": "minecraft:empty",
-                  "weight": 25
+                  "weight": 20
                 },
                 {
                   "type": "minecraft:item",
