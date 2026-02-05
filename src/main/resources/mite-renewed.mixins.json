@@ -27,7 +27,8 @@
 		"MiteDamageTrackerMixin",
 		"SlowSugarCaneMixin",
 		"MiteTradeCostMixin",
-		"MerchantOfferNoExpMixin"
+		"MerchantOfferNoExpMixin",
+		"MerchantSlotMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
