@@ -1,6 +1,6 @@
 package miterenewed.mixin;
 
-import miterenewed.ProgressionHelpers;
+import miterenewed.Utils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.food.FoodData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ public class HungerManagerMixin {
 	private void limitHunger(int food, float saturation, CallbackInfo ci) {
 		if (!((Object) this instanceof ServerPlayer player)) return;
 
-		int maxFood = ProgressionHelpers.getMaxFoodLevel(player);
+		int maxFood = Utils.getMaxFoodLevel(player);
 		if (this.foodLevel + food > maxFood) {
 			this.foodLevel = maxFood;
 			ci.cancel();

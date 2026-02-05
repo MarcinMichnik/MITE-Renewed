@@ -1,6 +1,7 @@
 package miterenewed.mixin;
 
-import net.minecraft.core.component.DataComponents;
+import miterenewed.ModConstants;
+import miterenewed.Utils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingMenu;
@@ -20,25 +21,13 @@ public class ItemExperienceCostMixin {
         boolean isCrafting = playerIn.containerMenu instanceof CraftingMenu ||
                 playerIn.containerMenu instanceof InventoryMenu;
         if (!isCrafting) return;
-        int req = getRequiredLevel(stack);
+        int req = Utils.getRequiredLevel(stack);
         if (req > 0) {
             if (playerIn.experienceLevel >= req) {
-                playerIn.giveExperiencePoints(-req * 4);
+                playerIn.giveExperiencePoints(-req * ModConstants.CRAFTING_EXP_COST_MODIFIER);
                 playerIn.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f);
             }
         }
     }
 
-    private int getRequiredLevel(ItemStack stack) {
-        if (stack.isEmpty()) return 0;
-        boolean isEnchantable = stack.has(DataComponents.ENCHANTABLE);
-        if (isEnchantable) {
-            if (stack.getDisplayName().getString().toLowerCase().contains("netherite")) return 35;
-            if (stack.getDisplayName().getString().toLowerCase().contains("diamond")) return 20;
-            if (stack.getDisplayName().getString().toLowerCase().contains("gold")) return 12;
-            if (stack.getDisplayName().getString().toLowerCase().contains("iron")) return 10;
-            if (stack.getDisplayName().getString().toLowerCase().contains("copper")) return 5;
-        }
-        return 0;
-    }
 }

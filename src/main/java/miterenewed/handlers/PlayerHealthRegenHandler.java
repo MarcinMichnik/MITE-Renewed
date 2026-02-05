@@ -1,7 +1,7 @@
 package miterenewed.handlers;
 
 import miterenewed.ModConstants;
-import miterenewed.ProgressionHelpers;
+import miterenewed.Utils;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +20,7 @@ public class PlayerHealthRegenHandler {
             if (player.isDeadOrDying()) continue;
             if (player.getHealth() >= player.getMaxHealth()) continue;
 
-            int maxFood = ProgressionHelpers.getMaxFoodLevel(player);
+            int maxFood = Utils.getMaxFoodLevel(player);
             int food = player.getFoodData().getFoodLevel();
 
             if (food >= maxFood) {

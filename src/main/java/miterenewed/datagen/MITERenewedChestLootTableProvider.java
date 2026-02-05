@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class MITERenewedChestLootTableProvider extends SimpleFabricLootTableProvider {
-    private final NumberProvider binomialRolls = BinomialDistributionGenerator.binomial(10, 0.2f);
+    private final NumberProvider binomialRolls = BinomialDistributionGenerator.binomial(10, 0.4f);
     public MITERenewedChestLootTableProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(output, registryLookup, LootContextParamSets.CHEST);
     }
@@ -658,6 +658,16 @@ public class MITERenewedChestLootTableProvider extends SimpleFabricLootTableProv
                         .add(LootItem.lootTableItem(Items.LEATHER_CHESTPLATE)
                                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f))))
                         .add(LootItem.lootTableItem(Items.LEATHER_LEGGINGS)
+                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f))))
+                        .add(LootItem.lootTableItem(Items.SADDLE)
+                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f))))
+                        .add(LootItem.lootTableItem(Items.COPPER_HORSE_ARMOR)
+                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f))))
+                        .add(LootItem.lootTableItem(Items.DIAMOND_HORSE_ARMOR)
+                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f))))
+                        .add(LootItem.lootTableItem(Items.IRON_HORSE_ARMOR)
+                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f))))
+                        .add(LootItem.lootTableItem(Items.GOLDEN_HORSE_ARMOR)
                                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0f))))
                 ));
     }
