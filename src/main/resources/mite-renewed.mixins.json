@@ -24,7 +24,8 @@
 		"ResultContainerPickupLimiterMixin",
 		"ItemExperienceCostMixin",
 		"SmithingExperienceCostMixin",
-		"MiteDamageTrackerMixin"
+		"MiteDamageTrackerMixin",
+		"SlowSugarCaneMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

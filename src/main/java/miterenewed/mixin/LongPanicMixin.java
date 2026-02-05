@@ -2,7 +2,9 @@ package miterenewed.mixin;
 
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Mixin(PanicGoal.class)
 public abstract class LongPanicMixin {
@@ -35,14 +36,11 @@ public abstract class LongPanicMixin {
             cir.setReturnValue(false);
             return;
         }
-        if (ticksSinceStartingPanic == 0 || ticksSinceStartingPanic % 4 == 0) {
-            ThreadLocalRandom rand = ThreadLocalRandom.current();
-            int distance = 8;
-            int xModifier = rand.nextBoolean() ? distance : -distance;
-            int zModifier = rand.nextBoolean() ? distance : -distance;
-            double targetX = mob.getX() + xModifier;
-            double targetZ = mob.getZ() + zModifier;
-            this.mob.getNavigation().moveTo(targetX, mob.getY(), targetZ, this.speedModifier);
+        if (ticksSinceStartingPanic == 0 || ticksSinceStartingPanic % 4 == 0 || this.mob.getNavigation().isDone()) {
+            Vec3 vec3 = DefaultRandomPos.getPos(this.mob, 12, 8);
+            if (vec3 != null) {
+                this.mob.getNavigation().moveTo(vec3.x, vec3.y, vec3.z, this.speedModifier);
+            }
         }
         cir.setReturnValue(true);
     }
