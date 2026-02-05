@@ -28,7 +28,8 @@
 		"SlowSugarCaneMixin",
 		"MiteTradeCostMixin",
 		"MerchantOfferNoExpMixin",
-		"MerchantSlotMixin"
+		"MerchantSlotMixin",
+		"MerchantShiftClickGuardMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
