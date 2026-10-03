@@ -9,12 +9,10 @@
           "name": "minecraft:sweet_berries"
         }
       ],
-      "functions": [
-        {
-          "function": "minecraft:set_count",
-          "count": { "type": "minecraft:constant", "value": 0 }
-        }
-      ]
+      "modifier": {
+        "type": "minecraft:set_count",
+        "count": 0
+      }
     }
   ]
 }

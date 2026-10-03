@@ -1,7 +1,10 @@
 package miterenewed;
 
 import miterenewed.handlers.PlayerExhaustionHandler;
+import miterenewed.handlers.HostileMobAggressionHandler;
+import miterenewed.handlers.MobDetectionRangeHandler;
 import miterenewed.handlers.PlayerHealthRegenHandler;
+import miterenewed.handlers.PlayerHungerHandler;
 import miterenewed.handlers.PlayerProgressionHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -34,6 +37,9 @@ public class MITERenewed implements ModInitializer {
 		PlayerProgressionHandler.init();
 		PlayerExhaustionHandler.init();
 		PlayerHealthRegenHandler.init();
+		MobDetectionRangeHandler.init();
+		PlayerHungerHandler.init();
+		HostileMobAggressionHandler.init();
 
 		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
 			if (entity instanceof Zombie zombie && zombie.isBaby()) {

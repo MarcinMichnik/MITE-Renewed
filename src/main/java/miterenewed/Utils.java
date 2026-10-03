@@ -3,15 +3,21 @@ package miterenewed;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
 public class Utils {
-    public static int getMaxFoodLevel(ServerPlayer player) {
+    /** Maximum food points (2 per hunger bar): BASE_HUNGER bars plus one per LEVELS_PER_UPGRADE levels, up to 10 bars. */
+    public static int getMaxFoodLevel(Player player) {
         int bonus = player.experienceLevel / ModConstants.LEVELS_PER_UPGRADE;
-        return (ModConstants.BASE_HUNGER + bonus) * 2;
+        return Math.min(ModConstants.BASE_HUNGER + bonus, 10) * 2;
     }
 
     public static int getRequiredLevel(ItemStack stack) {
@@ -38,6 +44,16 @@ public class Utils {
             tooltip.add(Component.literal("Crafting Cost: " + expCost + " Experience")
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
+    }
+
+    /**
+     * Leaves are transparent to skeletons (skeleton, stray, bogged...) and the arrows they shoot:
+     * they can spot targets through foliage and their arrows fly through it.
+     */
+    public static boolean seesThroughLeaves(Entity entity, BlockState state) {
+        boolean skeletonOrItsArrow = entity instanceof AbstractSkeleton
+                || entity instanceof AbstractArrow arrow && arrow.getOwner() instanceof AbstractSkeleton;
+        return skeletonOrItsArrow && state.is(BlockTags.LEAVES);
     }
 
 }

@@ -14,7 +14,7 @@ public class AutoMineManager {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
 
-        if (player == null) return;
+        if (player == null || !ModConstants.AUTO_MINE_ENABLED) return;
 
         boolean keyPressed = mc.mouseHandler.isLeftPressed() && mc.mouseHandler.isRightPressed();
         if (keyPressed && !keyWasPressed) {
@@ -37,11 +37,11 @@ public class AutoMineManager {
 
     private static void sendToggleMessage(LocalPlayer player) {
         String status = autoMineActive ? "§aON" : "§cOFF";
-        player.displayClientMessage(Component.literal("Auto-mine: " + status), true);
+        player.sendOverlayMessage(Component.literal("Auto-mine: " + status));
     }
 
     public static boolean isAutoMineActive() {
-        return autoMineActive;
+        return ModConstants.AUTO_MINE_ENABLED && autoMineActive;
     }
 
 }

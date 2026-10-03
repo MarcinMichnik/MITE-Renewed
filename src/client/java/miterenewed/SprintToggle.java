@@ -37,7 +37,7 @@ public final class SprintToggle {
 
     private static void sendToggleMessage(LocalPlayer player) {
         String status = isToggleEnabled ? "§aON" : "§cOFF";
-        player.displayClientMessage(Component.literal("Auto-sprint: " + status), true);
+        player.sendOverlayMessage(Component.literal("Auto-sprint: " + status));
     }
 
     public boolean isToggleEnabled() {

@@ -33,10 +33,9 @@ public class PlayerProgressionHandler {
     private static void applyProgression(ServerPlayer player) {
         int bonus = player.experienceLevel / ModConstants.LEVELS_PER_UPGRADE;
         int hearts = ModConstants.BASE_HEARTS + bonus;
-        int hunger = ModConstants.BASE_HUNGER + bonus;
 
+        // Hunger is capped continuously by PlayerFoodCapMixin
         applyHealth(player, Math.min(hearts, 10));
-        applyHunger(player, Math.min(hunger, 10));
     }
 
     private static void applyHealth(ServerPlayer player, int hearts) {
@@ -47,16 +46,6 @@ public class PlayerProgressionHandler {
         }
         if (player.getHealth() > maxHealth) {
             player.setHealth((float) maxHealth);
-        }
-    }
-
-    private static void applyHunger(ServerPlayer player, int hunger) {
-        int maxFood = hunger * 2;
-        if (player.getFoodData().getFoodLevel() > maxFood) {
-            player.getFoodData().setFoodLevel(maxFood);
-        }
-        if (player.getFoodData().getSaturationLevel() > maxFood) {
-            player.getFoodData().setSaturation(maxFood);
         }
     }
 

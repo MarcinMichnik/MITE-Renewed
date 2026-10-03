@@ -1,0 +1,5 @@
+{
+  "fabric:load_conditions": {
+    "condition": "fabric:false"
+  }
+}

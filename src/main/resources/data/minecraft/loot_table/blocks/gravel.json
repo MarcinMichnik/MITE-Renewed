@@ -9,15 +9,13 @@
           "children": [
             {
               "type": "minecraft:group",
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "type": "minecraft:player"
-                  }
+              "condition": {
+                "type": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "minecraft:entity_type": "minecraft:player"
                 }
-              ],
+              },
               "children": [
                 {
                   "type": "minecraft:item",

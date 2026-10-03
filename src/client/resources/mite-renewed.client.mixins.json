@@ -1,17 +1,17 @@
 {
 	"required": true,
 	"package": "miterenewed.mixin.client",
-	"compatibilityLevel": "JAVA_21",
+	"compatibilityLevel": "JAVA_25",
 	"client": [
-		"HungerHudMixin",
-		"SprintToggleMixin",
-		"ZoomMixin",
-		"MouseSensitivityMixin",
-		"KeyMappingMixin",
-		"ResultSlotTooltipMixin",
-		"MiteRecipeBookTooltipMixin",
-		"MerchantScreenAccessor",
-		"MerchantResultTooltipMixin"
+		"hud.HungerHudMixin",
+		"input.SprintToggleMixin",
+		"input.KeyMappingMixin",
+		"input.ZoomMixin",
+		"input.MouseSensitivityMixin",
+		"tooltip.ResultSlotTooltipMixin",
+		"tooltip.MiteRecipeBookTooltipMixin",
+		"tooltip.MerchantScreenAccessor",
+		"tooltip.MerchantResultTooltipMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

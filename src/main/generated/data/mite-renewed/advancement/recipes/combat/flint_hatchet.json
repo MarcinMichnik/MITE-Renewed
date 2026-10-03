@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "mite-renewed:flint_hatchet"
+        "recipes": "mite-renewed:flint_hatchet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

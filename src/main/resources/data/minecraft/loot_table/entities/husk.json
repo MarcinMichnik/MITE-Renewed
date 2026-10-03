@@ -7,9 +7,9 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:rotten_flesh",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
                 "min": 0,
@@ -17,15 +17,12 @@
               }
             },
             {
-              "function": "minecraft:enchanted_count_increase",
+              "type": "minecraft:enchanted_count_increase",
               "enchantment": "minecraft:looting",
-              "count": {
-                "type": "minecraft:constant",
-                "value": 1.0
-              }
+              "count": 1.0
             },
             {
-              "function": "minecraft:limit_count",
+              "type": "minecraft:limit_count",
               "limit": {
                 "min": 0,
                 "max": 3

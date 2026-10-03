@@ -1,6 +1,6 @@
 package miterenewed;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -8,7 +8,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
@@ -36,7 +35,8 @@ public class ModItems {
     private static void registerFlintHatchet() {
         Identifier id = Identifier.fromNamespaceAndPath(MOD_ID, "flint_hatchet");
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
-        AxeItem flintHatchet = new AxeItem(FLINT_TOOL_MATERIAL, 3.0F, -3.0F, new Item.Properties()
+        Item flintHatchet = new Item(new Item.Properties()
+            .axe(FLINT_TOOL_MATERIAL, 3.0F, -3.0F)
             .durability(5)
             .useItemDescriptionPrefix()
             .setId(key));
@@ -44,8 +44,8 @@ public class ModItems {
 
         // Get the event for modifying entries in the ingredients group.
         // And register an event handler that adds our suspicious item to the ingredients group.
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES)
-                .register((itemGroup) -> itemGroup.accept(FLINT_HATCHET));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES)
+                .register((output) -> output.accept(FLINT_HATCHET));
     }
 
 }
