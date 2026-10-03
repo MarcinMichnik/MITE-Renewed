@@ -22,6 +22,13 @@ public final class ModConstants {
     // Reach towards entities (blocks) without a tool, weapon or stick in hand; vanilla reach is 3
     public static final double BARE_HAND_ATTACK_RANGE = 2.0;
 
+    // Animal panic (cows, pigs, sheep, chickens...)
+    public static final double PANIC_SPEED_MULTIPLIER = 1.14; // on top of each animal's vanilla panic speed
+    public static final int PANIC_DURATION_TICKS = 200; // keep fleeing 10 s after being hit or alarmed
+    public static final int PANIC_MAX_DURATION_TICKS = 600; // ...up to 30 s while the attacker stays close
+    public static final double PANIC_THREAT_RADIUS = 12.0; // "close" for the rule above, in blocks
+    public static final double HERD_ALERT_RADIUS = 10.0; // same-type animals within this range flee too
+
     public static final float SEED_SATURATION = 0.5f; // saturation per seed eaten; seeds give no nutrition
 
     // Hostile mobs notice players from this many times their normal follow range

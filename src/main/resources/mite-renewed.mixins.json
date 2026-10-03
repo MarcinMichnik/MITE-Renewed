@@ -28,11 +28,11 @@
 		"entity.XRayTargetingMixin",
 		"entity.PassiveMobXpMixin",
 		"entity.MiteDamageTrackerMixin",
-		"entity.FastPanicMixin",
-		"entity.LongPanicMixin",
+		"entity.AnimalPanicMixin",
 		"entity.skeleton.SkeletonLeavesClipMixin",
 		"entity.skeleton.ArrowLeavesInGroundMixin",
 		"entity.zombie.ZombieBehaviourMixin",
+		"entity.zombie.NoBabyZombiesMixin",
 		"entity.zombie.ZombieDigTracker",
 		"entity.zombie.ClearBreakProgressOnRemoveMixin",
 		"world.StructureDistanceLimiterMixin"

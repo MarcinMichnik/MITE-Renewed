@@ -41,6 +41,7 @@ public class MITERenewed implements ModInitializer {
 		PlayerHungerHandler.init();
 		HostileMobAggressionHandler.init();
 
+		// Safety net for baby zombies not prevented by NoBabyZombiesMixin (old saves, zombified baby villagers...)
 		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
 			if (entity instanceof Zombie zombie && zombie.isBaby()) {
 				zombie.setBaby(false);
@@ -53,6 +54,9 @@ public class MITERenewed implements ModInitializer {
 		// Disable vanilla health regen because the mod will have different rules for this
         server.overworld().getGameRules()
 			.set(GameRules.NATURAL_HEALTH_REGENERATION, false, server);
+		// No random pillager patrols; outposts still spawn their own pillagers
+		server.overworld().getGameRules()
+			.set(GameRules.SPAWN_PATROLS, false, server);
 	}
 
 }
