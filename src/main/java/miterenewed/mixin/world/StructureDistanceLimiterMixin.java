@@ -22,6 +22,19 @@ public abstract class StructureDistanceLimiterMixin {
 
     @Unique private static final int WOODLAND_MANSION_SALT = 10387319;
 
+    // Structures with loot strong enough to skip the early game
+    @Unique private static final int ABANDONED_CAMPS_SALT = 91231127;
+    @Unique private static final int DESERT_PYRAMIDS_SALT = 14357617;
+    @Unique private static final int IGLOOS_SALT = 14357618;
+    @Unique private static final int JUNGLE_TEMPLES_SALT = 14357619;
+    @Unique private static final int OCEAN_RUINS_SALT = 14357621;
+    @Unique private static final int SHIPWRECKS_SALT = 165745295;
+    @Unique private static final int RUINED_PORTALS_SALT = 34222645;
+    @Unique private static final int TRIAL_CHAMBERS_SALT = 94251327;
+    @Unique private static final int TRAIL_RUINS_SALT = 83469867;
+    @Unique private static final int ANCIENT_CITIES_SALT = 20083232;
+    @Unique private static final int OCEAN_MONUMENTS_SALT = 10387313; // shared with end cities, which are far out anyway
+
     @Shadow
     protected abstract int salt();
 
@@ -31,6 +44,9 @@ public abstract class StructureDistanceLimiterMixin {
         int minBlockDistance = switch (salt()) {
             case VILLAGES_SALT -> ModConstants.MIN_DISTANCE_VILLAGE_GENERATION;
             case PILLAGER_OUTPOSTS_SALT, WOODLAND_MANSION_SALT -> ModConstants.MIN_DISTANCE_PILLAGER_OUTPOST_GENERATION;
+            case ABANDONED_CAMPS_SALT, DESERT_PYRAMIDS_SALT, IGLOOS_SALT, JUNGLE_TEMPLES_SALT, OCEAN_RUINS_SALT,
+                 SHIPWRECKS_SALT, RUINED_PORTALS_SALT, TRIAL_CHAMBERS_SALT, TRAIL_RUINS_SALT, ANCIENT_CITIES_SALT,
+                 OCEAN_MONUMENTS_SALT -> ModConstants.MIN_DISTANCE_LOOT_STRUCTURE_GENERATION;
             default -> 0;
         };
         if (minBlockDistance <= 0) {

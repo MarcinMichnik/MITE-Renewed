@@ -5,9 +5,13 @@ import miterenewed.PanicAlarm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.animal.chicken.Chicken;
+import net.minecraft.world.entity.animal.cow.AbstractCow;
+import net.minecraft.world.entity.animal.pig.Pig;
+import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -23,9 +27,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * Makes panicking animals (cows, pigs, sheep, chickens...) much harder to catch:
  * <ul>
- *   <li>they run faster and flee <em>away</em> from whoever hit them instead of in a random direction,</li>
+ *   <li>farm animals all flee at the same speed, others run faster than vanilla; all flee <em>away</em> from whoever hit them instead of in a random direction,</li>
  *   <li>they keep fleeing for a while after the hit, and longer while the attacker stays close,</li>
- *   <li>a hit raises the alarm for the whole herd (same mob type nearby), which scatters too.</li>
+ *   <li>a hit raises the alarm for the whole herd (all animals nearby), which scatters too.</li>
  * </ul>
  */
 @Mixin(PanicGoal.class)
@@ -45,12 +49,22 @@ public abstract class AnimalPanicMixin implements PanicAlarm {
 
     @Unique @Nullable private LivingEntity threat;
     @Unique private int alarmTick = NOT_ALARMED;
-    @Unique private int lastHerdAlertTick = NOT_ALARMED;
 
     // The other constructors delegate here, so the boost is applied exactly once
     @Inject(method = "<init>(Lnet/minecraft/world/entity/PathfinderMob;DLjava/util/function/Function;)V", at = @At("RETURN"))
     private void mite$boostPanicSpeed(CallbackInfo ci) {
-        this.speedModifier *= ModConstants.PANIC_SPEED_MULTIPLIER;
+        if (isFarmAnimal()) {
+            // Vanilla gives each farm animal a different panic speed (pigs and sheep are much slower than cows),
+            // so pick the modifier that makes all of them flee equally fast
+            this.speedModifier = ModConstants.FARM_ANIMAL_PANIC_SPEED / mob.getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
+        } else {
+            this.speedModifier *= ModConstants.PANIC_SPEED_MULTIPLIER;
+        }
+    }
+
+    @Unique
+    private boolean isFarmAnimal() {
+        return mob instanceof AbstractCow || mob instanceof Pig || mob instanceof Sheep || mob instanceof Chicken;
     }
 
     @Override
@@ -62,13 +76,8 @@ public abstract class AnimalPanicMixin implements PanicAlarm {
     @Inject(method = "shouldPanic", at = @At("RETURN"), cancellable = true)
     private void mite$panicWhileAlarmed(CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValueZ()) {
-            // Vanilla says we were just hurt: remember who did it and warn the herd
-            LivingEntity attacker = mob.getLastHurtByMob();
-            mite$alarm(attacker);
-            if (attacker != null && mob.tickCount - lastHerdAlertTick >= 20) {
-                lastHerdAlertTick = mob.tickCount;
-                alertHerd(attacker);
-            }
+            // Vanilla says we were just hurt: remember who did it (the herd is warned from AnimalHurtAlarmMixin)
+            mite$alarm(mob.getLastHurtByMob());
         } else if (isAlarmed()) {
             cir.setReturnValue(true);
         }
@@ -111,18 +120,5 @@ public abstract class AnimalPanicMixin implements PanicAlarm {
         return threat != null && threat.isAlive()
                 && sinceAlarm < ModConstants.PANIC_MAX_DURATION_TICKS
                 && mob.distanceToSqr(threat) < radius * radius;
-    }
-
-    @Unique
-    private void alertHerd(LivingEntity attacker) {
-        var area = mob.getBoundingBox().inflate(ModConstants.HERD_ALERT_RADIUS);
-        for (PathfinderMob other : mob.level().getEntitiesOfClass(PathfinderMob.class, area,
-                e -> e != mob && e.getType() == mob.getType() && e.isAlive())) {
-            for (WrappedGoal goal : ((MobGoalsAccessor) other).mite$getGoalSelector().getAvailableGoals()) {
-                if (goal.getGoal() instanceof PanicAlarm alarm) {
-                    alarm.mite$alarm(attacker);
-                }
-            }
-        }
     }
 }

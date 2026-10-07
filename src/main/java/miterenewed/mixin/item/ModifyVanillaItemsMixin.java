@@ -19,16 +19,16 @@ public class ModifyVanillaItemsMixin {
             argsOnly = true
     )
     private static Item.Properties modifyVanillaItems(Item.Properties properties, ResourceKey<Item> key) {
-        Set<String> SEED_IDS = Set.of(
+        Set<String> SATURATION_ONLY_FOOD_IDS = Set.of(
                 "wheat_seeds",
                 "pumpkin_seeds",
                 "melon_seeds",
-                "beetroot_seeds"
+                "beetroot_seeds",
+                "sugar"
         );
 
-        // Check if the item being registered is one of our target seeds
-        String fullName = key.identifier().getPath();
-        if (SEED_IDS.stream().anyMatch(fullName::contains)) {
+        // Exact match, so "sugar" doesn't also catch "sugar_cane"
+        if (SATURATION_ONLY_FOOD_IDS.contains(key.identifier().getPath())) {
             // No nutrition (hunger bars unchanged), a little saturation, edible even when full
             FoodProperties seedFood = new FoodProperties(0, ModConstants.SEED_SATURATION, true);
 

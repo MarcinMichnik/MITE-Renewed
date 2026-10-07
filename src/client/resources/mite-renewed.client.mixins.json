@@ -6,6 +6,7 @@
 		"hud.HungerHudMixin",
 		"input.SprintToggleMixin",
 		"input.KeyMappingMixin",
+		"input.AutoMineDestroyTargetMixin",
 		"input.ZoomMixin",
 		"input.MouseSensitivityMixin",
 		"tooltip.ResultSlotTooltipMixin",

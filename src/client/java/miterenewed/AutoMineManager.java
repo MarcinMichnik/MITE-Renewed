@@ -3,8 +3,8 @@ package miterenewed;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.phys.BlockHitResult;
 
 public class AutoMineManager {
     private static boolean autoMineActive = false;
@@ -14,24 +14,28 @@ public class AutoMineManager {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
 
-        if (player == null || !ModConstants.AUTO_MINE_ENABLED) return;
+        if (player == null || mc.gameMode == null || !ModConstants.AUTO_MINE_ENABLED) return;
 
         boolean keyPressed = mc.mouseHandler.isLeftPressed() && mc.mouseHandler.isRightPressed();
         if (keyPressed && !keyWasPressed) {
             autoMineActive = !autoMineActive;
             sendToggleMessage(player);
-        }
-
-        // Simulate holding left click when active
-        if (!autoMineActive) {
-            if (mc.level != null && keyWasPressed && mc.hitResult instanceof BlockHitResult blockHit) {
-                mc.level.destroyBlockProgress(mc.player.getId(), blockHit.getBlockPos(), -1);
-                if (mc.gameMode != null) {
-                    // Workaround to reset block destruction progress
-                    mc.gameMode.startDestroyBlock(blockHit.getBlockPos(), blockHit.getDirection());
-                }
+            if (!autoMineActive) {
+                mc.gameMode.stopDestroyBlock();
             }
         }
+
+        // Keep the toggle chord from mining after auto-mine was switched off
+        if (!autoMineActive && keyPressed) {
+            mc.gameMode.stopDestroyBlock();
+        }
+
+        // Vanilla skips continueAttack for piercing weapons (spears) without ever calling stopDestroyBlock,
+        // which would leave the crack overlay and server-side progress hanging
+        if (mc.gameMode.isDestroying() && player.getMainHandItem().has(DataComponents.PIERCING_WEAPON)) {
+            mc.gameMode.stopDestroyBlock();
+        }
+
         keyWasPressed = keyPressed;
     }
 
