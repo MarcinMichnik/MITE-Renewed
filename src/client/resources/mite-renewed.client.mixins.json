@@ -7,6 +7,8 @@
 		"input.SprintToggleMixin",
 		"input.KeyMappingMixin",
 		"input.AutoMineDestroyTargetMixin",
+		"crafting.CraftingScreenProgressMixin",
+		"crafting.InventoryScreenProgressMixin",
 		"input.ZoomMixin",
 		"input.MouseSensitivityMixin",
 		"tooltip.ResultSlotTooltipMixin",

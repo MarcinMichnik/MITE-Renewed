@@ -2,6 +2,7 @@ package miterenewed;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
@@ -32,6 +33,27 @@ public class Utils {
             if (itemName.contains("copper")) return 5;
         }
         return 0;
+    }
+
+    /**
+     * Crafting time in ticks: a base time plus a per-ingredient time. Gear (tools, weapons, armor)
+     * takes longer per ingredient the stronger its material is.
+     */
+    public static int getCraftingTicks(ItemStack result, int ingredients) {
+        if (result.isEmpty()) return 0;
+        int perIngredient = ModConstants.CRAFTING_TICKS_PER_INGREDIENT;
+        if (result.has(DataComponents.ENCHANTABLE) || result.isDamageableItem()) {
+            String id = BuiltInRegistries.ITEM.getKey(result.getItem()).getPath();
+            if (id.contains("netherite")) perIngredient = 30;
+            else if (id.contains("diamond")) perIngredient = 25;
+            else if (id.contains("iron")) perIngredient = 15;
+            else if (id.contains("golden")) perIngredient = 12;
+            else if (id.contains("copper")) perIngredient = 10;
+            else if (id.contains("stone") || id.contains("chainmail")) perIngredient = 8;
+            else if (id.contains("wooden") || id.contains("leather")) perIngredient = 5;
+            else perIngredient = 6; // bows, shields, fishing rods...
+        }
+        return ModConstants.CRAFTING_BASE_TICKS + perIngredient * ingredients;
     }
 
     public static void addToTooltip(List<Component> tooltip, int req, boolean reqMet, boolean isCraftingMenu) {

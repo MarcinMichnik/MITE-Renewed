@@ -9,9 +9,11 @@ import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -40,12 +42,15 @@ public abstract class MiteDamageTrackerMixin {
         }
     }
 
-    // Same rule for loot: no loot table or equipment drops unless the player did all the damage
-    @Inject(method = "shouldDropLoot", at = @At("HEAD"), cancellable = true)
-    private void mite$cancelUnfairLoot(ServerLevel level, CallbackInfoReturnable<Boolean> cir) {
-        if (nonPlayerDamageDetected) {
-            cir.setReturnValue(false);
-        }
+    @Shadow
+    protected abstract boolean shouldDropLoot(ServerLevel level);
+
+    // Same rule for loot: no loot table or equipment drops unless the player did all the damage.
+    // Hooked at the call site because Monster overrides shouldDropLoot without calling super.
+    @Redirect(method = "dropAllDeathLoot", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/LivingEntity;shouldDropLoot(Lnet/minecraft/server/level/ServerLevel;)Z"))
+    private boolean mite$cancelUnfairLoot(LivingEntity self, ServerLevel level) {
+        return !nonPlayerDamageDetected && this.shouldDropLoot(level);
     }
 
     // ...but items a mob picked up (e.g. the player's lost gear) still drop

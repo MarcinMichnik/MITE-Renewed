@@ -14,6 +14,9 @@ public final class ModConstants {
     public static final int MIN_DISTANCE_PILLAGER_OUTPOST_GENERATION = 1000; // blocks from world origin
     public static final int MIN_DISTANCE_LOOT_STRUCTURE_GENERATION = 1000; // camps, temples, shipwrecks, ruined portals...; blocks from world origin
     public static final int CRAFTING_EXP_COST_MODIFIER = 6;
+    // Crafting time = base + ticks per ingredient; gear uses a per-ingredient time by material (see Utils.getCraftingTicks)
+    public static final int CRAFTING_BASE_TICKS = 30;
+    public static final int CRAFTING_TICKS_PER_INGREDIENT = 6;
     public static final int TRADE_COST_MODIFIER = 10;
     public static final int REGEN_INTERVAL_TICKS = 1500;
     public static final float REGEN_AMOUNT = 1.0F;
