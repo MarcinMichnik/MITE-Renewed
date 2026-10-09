@@ -9,6 +9,7 @@ public class MITERenewedClient implements ClientModInitializer {
 		ModKeyBindings.register();
 		SprintToggle.getSprintToggle().registerSprintToggle();
 		ZoomToggle.getZoomToggle().registerZoomToggle();
+		FoodTooltip.register();
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			AutoMineManager.update();

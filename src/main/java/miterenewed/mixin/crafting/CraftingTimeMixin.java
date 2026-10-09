@@ -107,8 +107,13 @@ public abstract class CraftingTimeMixin extends RecipeBookMenu implements Crafti
         // Same checks a click goes through; if the inventory is full the item stays for the player to take by hand
         if (result.hasItem() && result.mayPickup(player)
                 && player.experienceLevel >= Utils.getRequiredLevel(result.getItem())) {
+            ItemStack crafted = result.getItem().copy();
             // Shift-click logic: crafts once, moves the item into the inventory and calls onTake
             this.quickMoveStack(player, result.index);
+            // onTake restarted the timer; if the leftover ingredients make the same item again, keep crafting
+            if (!crafting && ItemStack.isSameItemSameComponents(result.getItem(), crafted)) {
+                mite$startCraft();
+            }
         }
     }
 

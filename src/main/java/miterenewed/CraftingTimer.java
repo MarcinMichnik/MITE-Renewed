@@ -21,7 +21,10 @@ public interface CraftingTimer {
     /** Resets to waiting for the next click, e.g. after the result was taken. */
     void mite$restartCraft();
 
-    /** Server side, every tick: moves a finished result into the player's inventory. */
+    /**
+     * Server side, every tick: moves a finished result into the player's inventory, then starts
+     * crafting the next one if the remaining ingredients still make the same item.
+     */
     void mite$tickCraft();
 
     default boolean mite$isCraftReady() {
