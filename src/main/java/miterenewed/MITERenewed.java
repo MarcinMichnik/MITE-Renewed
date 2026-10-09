@@ -2,6 +2,7 @@ package miterenewed;
 
 import miterenewed.handlers.PlayerExhaustionHandler;
 import miterenewed.handlers.HostileMobAggressionHandler;
+import miterenewed.handlers.HostileMobCropHandler;
 import miterenewed.handlers.MobDetectionRangeHandler;
 import miterenewed.handlers.PlayerHealthRegenHandler;
 import miterenewed.handlers.PlayerHungerHandler;
@@ -40,6 +41,7 @@ public class MITERenewed implements ModInitializer {
 		MobDetectionRangeHandler.init();
 		PlayerHungerHandler.init();
 		HostileMobAggressionHandler.init();
+		HostileMobCropHandler.init();
 
 		// Safety net for baby zombies not prevented by NoBabyZombiesMixin (old saves, zombified baby villagers...)
 		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {

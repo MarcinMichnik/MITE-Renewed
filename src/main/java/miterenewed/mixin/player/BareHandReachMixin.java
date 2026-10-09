@@ -17,36 +17,44 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Shortens the player's reach towards entities when the main hand holds no tool, weapon or stick.
- * Updated every tick on both sides, so the crosshair (client) and hit validation (server) agree.
- * Items with their own attack range (spears) are unaffected; block reach is unaffected.
+ * Shortens the player's reach towards entities and blocks (breaking and placing) when the main hand
+ * holds no tool, weapon, stick or bone. Updated every tick on both sides, so the crosshair (client)
+ * and validation (server) agree. Items with their own attack range (spears) keep their entity reach.
  */
 @Mixin(Player.class)
 public abstract class BareHandReachMixin {
     @Unique
     private static final Identifier BARE_HAND_REACH =
             Identifier.fromNamespaceAndPath(ModItems.MOD_ID, "bare_hand_reach");
+    @Unique
+    private static final Identifier BARE_HAND_BLOCK_REACH =
+            Identifier.fromNamespaceAndPath(ModItems.MOD_ID, "bare_hand_block_reach");
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void mite$updateBareHandReach(CallbackInfo ci) {
         Player player = (Player) (Object) this;
-        AttributeInstance reach = player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE);
-        if (reach == null) {
+        boolean shorten = !player.isCreative() && !isReachItem(player.getMainHandItem());
+        updateModifier(player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE), BARE_HAND_REACH, shorten,
+                ModConstants.BARE_HAND_ATTACK_RANGE - Player.DEFAULT_ENTITY_INTERACTION_RANGE);
+        updateModifier(player.getAttribute(Attributes.BLOCK_INTERACTION_RANGE), BARE_HAND_BLOCK_REACH, shorten,
+                ModConstants.BARE_HAND_BLOCK_RANGE - Player.DEFAULT_BLOCK_INTERACTION_RANGE);
+    }
+
+    @Unique
+    private static void updateModifier(AttributeInstance attribute, Identifier id, boolean apply, double amount) {
+        if (attribute == null) {
             return;
         }
-
-        boolean shorten = !player.isCreative() && !isReachItem(player.getMainHandItem());
-        if (shorten && !reach.hasModifier(BARE_HAND_REACH)) {
-            reach.addTransientModifier(new AttributeModifier(BARE_HAND_REACH,
-                    ModConstants.BARE_HAND_ATTACK_RANGE - Player.DEFAULT_ENTITY_INTERACTION_RANGE,
-                    AttributeModifier.Operation.ADD_VALUE));
-        } else if (!shorten && reach.hasModifier(BARE_HAND_REACH)) {
-            reach.removeModifier(BARE_HAND_REACH);
+        if (apply && !attribute.hasModifier(id)) {
+            attribute.addTransientModifier(new AttributeModifier(id, amount, AttributeModifier.Operation.ADD_VALUE));
+        } else if (!apply && attribute.hasModifier(id)) {
+            attribute.removeModifier(id);
         }
     }
 
     @Unique
     private static boolean isReachItem(ItemStack stack) {
-        return stack.has(DataComponents.TOOL) || stack.has(DataComponents.WEAPON) || stack.is(Items.STICK);
+        return stack.has(DataComponents.TOOL) || stack.has(DataComponents.WEAPON)
+                || stack.is(Items.STICK) || stack.is(Items.BONE);
     }
 }

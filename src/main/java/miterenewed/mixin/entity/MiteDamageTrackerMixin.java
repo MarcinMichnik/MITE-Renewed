@@ -5,7 +5,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class MiteDamageTrackerMixin {
     @Unique private boolean nonPlayerDamageDetected = false;
+    @Unique private boolean killedByHostile = false;
 
     @Inject(method = "hurtServer", at = @At("HEAD"))
     private void mite$trackDamageSource(ServerLevel serverLevel, DamageSource source, float amount,
@@ -50,7 +53,13 @@ public abstract class MiteDamageTrackerMixin {
     @Redirect(method = "dropAllDeathLoot", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/LivingEntity;shouldDropLoot(Lnet/minecraft/server/level/ServerLevel;)Z"))
     private boolean mite$cancelUnfairLoot(LivingEntity self, ServerLevel level) {
-        return !nonPlayerDamageDetected && this.shouldDropLoot(level);
+        return !nonPlayerDamageDetected && !killedByHostile && this.shouldDropLoot(level);
+    }
+
+    // Animals killed by a hostile mob (e.g. a zombie hunting them) drop no loot
+    @Inject(method = "dropAllDeathLoot", at = @At("HEAD"))
+    private void mite$detectHostileKill(ServerLevel level, DamageSource source, CallbackInfo ci) {
+        this.killedByHostile = (Object) this instanceof Animal && source.getEntity() instanceof Enemy;
     }
 
     // ...but items a mob picked up (e.g. the player's lost gear) still drop

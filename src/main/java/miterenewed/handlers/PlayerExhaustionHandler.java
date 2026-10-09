@@ -2,6 +2,7 @@ package miterenewed.handlers;
 
 import miterenewed.ModConstants;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import java.util.HashMap;
@@ -13,6 +14,8 @@ public class PlayerExhaustionHandler {
     public static void init() {
         ServerTickEvents.END_SERVER_TICK.register(PlayerExhaustionHandler::applyPassiveExhaustion);
         ServerTickEvents.END_SERVER_TICK.register(PlayerExhaustionHandler::applyExhaustionOnJump);
+        PlayerBlockBreakEvents.AFTER.register((level, player, pos, state, blockEntity) ->
+                player.causeFoodExhaustion(ModConstants.EXHAUSTION_ON_BLOCK_BREAK));
     }
     private static void applyPassiveExhaustion(MinecraftServer server) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {

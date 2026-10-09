@@ -18,7 +18,7 @@ public class ModItems {
 
     public static final ToolMaterial FLINT_TOOL_MATERIAL = new ToolMaterial(
             BlockTags.INCORRECT_FOR_WOODEN_TOOL, // Which blocks it CANNOT break
-            5,      // Durability
+            4,      // Durability
             2.0F,    // Mining Speed
             1.0F,    // Attack Damage
             5,       // Enchantability
@@ -37,7 +37,7 @@ public class ModItems {
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
         Item flintHatchet = new Item(new Item.Properties()
             .axe(FLINT_TOOL_MATERIAL, 3.0F, -3.0F)
-            .durability(5)
+            .durability(4)
             .useItemDescriptionPrefix()
             .setId(key));
         FLINT_HATCHET = Registry.register(BuiltInRegistries.ITEM, key, flintHatchet);
