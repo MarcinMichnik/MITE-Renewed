@@ -35,6 +35,15 @@ public class Utils {
         return 0;
     }
 
+    /** Experience points taken when crafting or smithing an item that has a level requirement. */
+    public static int getCraftingExpCost(ItemStack stack) {
+        int req = getRequiredLevel(stack);
+        if (req > 0 && stack.getDisplayName().getString().toLowerCase().contains("copper")) {
+            return ModConstants.COPPER_CRAFTING_EXP_COST;
+        }
+        return req * ModConstants.CRAFTING_EXP_COST_MODIFIER;
+    }
+
     /**
      * Crafting time in ticks: a base time plus a per-ingredient time. Gear (tools, weapons, armor)
      * takes longer per ingredient the stronger its material is.
@@ -56,12 +65,11 @@ public class Utils {
         return ModConstants.CRAFTING_BASE_TICKS + perIngredient * ingredients;
     }
 
-    public static void addToTooltip(List<Component> tooltip, int req, boolean reqMet, boolean isCraftingMenu) {
+    public static void addToTooltip(List<Component> tooltip, int req, int expCost, boolean reqMet, boolean isCraftingMenu) {
         ChatFormatting color = reqMet ? ChatFormatting.GREEN : ChatFormatting.RED;
         tooltip.add(Component.empty());
         tooltip.add(Component.literal("⚒ FORGE KNOWLEDGE").withStyle(ChatFormatting.GOLD));
         tooltip.add(Component.literal("Requires: Level " + req).withStyle(color));
-        int expCost = req * ModConstants.CRAFTING_EXP_COST_MODIFIER;
         if (isCraftingMenu) {
             tooltip.add(Component.literal("Crafting Cost: " + expCost + " Experience")
                     .withStyle(ChatFormatting.LIGHT_PURPLE));

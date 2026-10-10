@@ -29,7 +29,7 @@ public class ItemExperienceCostMixin {
         if (!isCrafting) return;
         int req = Utils.getRequiredLevel(stack);
         if (req > 0 && player.experienceLevel >= req) {
-            player.giveExperiencePoints(-req * ModConstants.CRAFTING_EXP_COST_MODIFIER);
+            player.giveExperiencePoints(-Utils.getCraftingExpCost(stack));
             player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f);
         }
     }

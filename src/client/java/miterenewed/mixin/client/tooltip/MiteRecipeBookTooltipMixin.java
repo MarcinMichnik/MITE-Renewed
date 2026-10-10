@@ -26,7 +26,7 @@ public class MiteRecipeBookTooltipMixin {
             Player player = Minecraft.getInstance().player;
 
             boolean met = player != null && player.experienceLevel >= req;
-            Utils.addToTooltip(tooltip, req, met, true);
+            Utils.addToTooltip(tooltip, req, Utils.getCraftingExpCost(entry), met, true);
         }
     }
 

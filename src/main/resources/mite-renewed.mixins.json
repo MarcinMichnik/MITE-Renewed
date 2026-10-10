@@ -41,6 +41,8 @@
 		"entity.AnimalHurtAlarmMixin",
 		"entity.MiteDamageTrackerMixin",
 		"entity.AnimalPanicMixin",
+		"entity.FishEvasionMixin",
+		"entity.FishSpawnCapMixin",
 		"entity.BurningMobIgnitesTreesMixin",
 		"entity.skeleton.SkeletonLeavesClipMixin",
 		"entity.skeleton.ArrowLeavesInGroundMixin",

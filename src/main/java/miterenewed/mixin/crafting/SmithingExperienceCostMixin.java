@@ -18,7 +18,7 @@ public class SmithingExperienceCostMixin {
     private void mite$consumeXpOnSmithingTake(Player player, ItemStack stack, CallbackInfo ci) {
         int req = Utils.getRequiredLevel(stack);
         if (req > 0 && player.experienceLevel >= req) {
-            player.giveExperiencePoints(-req * ModConstants.CRAFTING_EXP_COST_MODIFIER);
+            player.giveExperiencePoints(-Utils.getCraftingExpCost(stack));
             player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f);
         }
     }

@@ -19,4 +19,10 @@ public class ToolMaterialDurabilityMixin {
     private static int miteStoneDurability(int original) {
         return ModConstants.STONE_TOOL_DURABILITY;
     }
+
+    // Vanilla COPPER durability is 190
+    @ModifyConstant(method = "<clinit>", constant = @Constant(intValue = 190))
+    private static int miteCopperDurability(int original) {
+        return ModConstants.COPPER_TOOL_DURABILITY;
+    }
 }

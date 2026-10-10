@@ -38,7 +38,7 @@ public abstract class ResultSlotTooltipMixin {
             boolean isCraftingMenu = screenMenu instanceof CraftingMenu || screenMenu instanceof InventoryMenu
                     || screenMenu instanceof SmithingMenu;
 
-            Utils.addToTooltip(tooltip, req, met, isCraftingMenu);
+            Utils.addToTooltip(tooltip, req, Utils.getCraftingExpCost(stack), met, isCraftingMenu);
         }
     }
 
