@@ -14,7 +14,6 @@ public final class ModConstants {
     public static final int MIN_DISTANCE_PILLAGER_OUTPOST_GENERATION = 1000; // blocks from world origin
     public static final int MIN_DISTANCE_LOOT_STRUCTURE_GENERATION = 1000; // camps, temples, shipwrecks, ruined portals...; blocks from world origin
     public static final int CRAFTING_EXP_COST_MODIFIER = 6; // exp points per required level
-    public static final int COPPER_CRAFTING_EXP_COST = 20; // copper gear overrides the above (level 5 would be 30)
     // Crafting time = base + ticks per ingredient; gear uses a per-ingredient time by material (see Utils.getCraftingTicks)
     public static final int CRAFTING_BASE_TICKS = 52;
     public static final int CRAFTING_TICKS_PER_INGREDIENT = 16;
@@ -43,9 +42,9 @@ public final class ModConstants {
     public static final float FISH_AVOID_PLAYER_RANGE = 12.0f; // start swimming away from a visible player within this many blocks; vanilla 8
     public static final double FISH_AVOID_PLAYER_SPEED = 2.0; // speed multiplier while avoiding a player; vanilla 1.6 when far, 1.4 when close
     public static final double FISH_PANIC_SPEED = 1.8; // speed multiplier after being hurt, before PANIC_SPEED_MULTIPLIER; vanilla 1.25
-    public static final int FISH_SPAWN_CAP = 10; // natural spawn cap for fish (water ambient mobs); vanilla 20
+    public static final int FISH_SPAWN_CAP = 4; // natural spawn cap for fish (water ambient mobs); vanilla 20
 
-    public static final float BURNING_MOB_TREE_IGNITE_CHANCE = 0.01f; // per tick while a burning mob is within 1 block of logs/leaves (~5 s on average)
+    public static final float BURNING_MOB_TREE_IGNITE_CHANCE = 0.002f; // per tick while a burning mob is within 1 block of logs/leaves (~5 s on average)
 
     public static final float SEED_SATURATION = 0.5f; // saturation per seed or sugar eaten; they give no nutrition
 
@@ -54,8 +53,13 @@ public final class ModConstants {
     public static final int STONE_TOOL_DURABILITY = 12;
     public static final int COPPER_TOOL_DURABILITY = 16;
 
-    public static final float WOODEN_SWORD_ATTACK_DAMAGE = 3.0F; // total damage per hit; vanilla 4
-    public static final float STONE_SWORD_ATTACK_DAMAGE = 4.0F; // total damage per hit; vanilla 5
+    // XP dropped by coal ore and deepslate coal ore (vanilla 0-2)
+    public static final int COAL_ORE_MIN_XP = 1;
+    public static final int COAL_ORE_MAX_XP = 2;
+
+    // Furnace/blast furnace recipes that make these ingots; vanilla gives 0.7 per ingot for both
+    public static final float COPPER_SMELTING_XP_MULTIPLIER = 2.0f; // 1.4 per ingot
+    public static final float IRON_SMELTING_XP_MULTIPLIER = 2.5f; // 1.75 per ingot
 
     // Hostile mobs notice players from this many times their normal follow range
     public static final double MOB_DETECTION_RANGE_MULTIPLIER = 2;

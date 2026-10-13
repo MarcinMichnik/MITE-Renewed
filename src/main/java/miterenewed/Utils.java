@@ -26,22 +26,17 @@ public class Utils {
         boolean isEnchantable = stack.has(DataComponents.ENCHANTABLE);
         if (isEnchantable) {
             String itemName = stack.getDisplayName().getString().toLowerCase();
-            if (itemName.contains("netherite")) return 35;
-            if (itemName.contains("diamond")) return 20;
-            if (itemName.contains("gold")) return 12;
-            if (itemName.contains("iron")) return 10;
-            if (itemName.contains("copper")) return 5;
+            if (itemName.contains("netherite")) return 18;
+            if (itemName.contains("diamond")) return 10;
+            if (itemName.contains("gold")) return 6;
+            if (itemName.contains("iron")) return 5;
         }
         return 0;
     }
 
     /** Experience points taken when crafting or smithing an item that has a level requirement. */
     public static int getCraftingExpCost(ItemStack stack) {
-        int req = getRequiredLevel(stack);
-        if (req > 0 && stack.getDisplayName().getString().toLowerCase().contains("copper")) {
-            return ModConstants.COPPER_CRAFTING_EXP_COST;
-        }
-        return req * ModConstants.CRAFTING_EXP_COST_MODIFIER;
+        return getRequiredLevel(stack) * ModConstants.CRAFTING_EXP_COST_MODIFIER;
     }
 
     /**
