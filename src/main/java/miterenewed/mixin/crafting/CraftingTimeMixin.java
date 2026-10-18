@@ -94,6 +94,8 @@ public abstract class CraftingTimeMixin extends RecipeBookMenu implements Crafti
         if (!crafting && !result.isEmpty() && player.experienceLevel >= Utils.getRequiredLevel(result)) {
             crafting = true;
             craftStartTime = player.level().getGameTime();
+            // The level may have changed since the result appeared (crafting costs experience)
+            duration = mite$computeDuration(player, result);
         }
     }
 
@@ -132,7 +134,12 @@ public abstract class CraftingTimeMixin extends RecipeBookMenu implements Crafti
         }
         lastResult = result.copy();
         crafting = false;
-        duration = player.hasInfiniteMaterials() ? 0 : Utils.getCraftingTicks(result, mite$countIngredients());
+        duration = mite$computeDuration(player, result);
+    }
+
+    @Unique
+    private int mite$computeDuration(Player player, ItemStack result) {
+        return player.hasInfiniteMaterials() ? 0 : Utils.getCraftingTicks(player, result, mite$countIngredients());
     }
 
     @Unique

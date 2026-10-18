@@ -20,14 +20,8 @@ public class AutoMineManager {
         if (keyPressed && !keyWasPressed) {
             autoMineActive = !autoMineActive;
             sendToggleMessage(player);
-            if (!autoMineActive) {
-                mc.gameMode.stopDestroyBlock();
-            }
-        }
-
-        // Keep the toggle chord from mining after auto-mine was switched off
-        if (!autoMineActive && keyPressed) {
-            mc.gameMode.stopDestroyBlock();
+            // No stopDestroyBlock here: switching off while still holding left click keeps the progress,
+            // and vanilla stops mining by itself once attack is no longer held
         }
 
         // Vanilla skips continueAttack for piercing weapons (spears) without ever calling stopDestroyBlock,

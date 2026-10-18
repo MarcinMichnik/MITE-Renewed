@@ -10,6 +10,7 @@ import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
@@ -23,6 +24,10 @@ public class Utils {
 
     public static int getRequiredLevel(ItemStack stack) {
         if (stack.isEmpty()) return 0;
+        if (stack.is(Items.SHIELD) || stack.is(Items.BOW) || stack.is(Items.SHEARS) || stack.is(Items.BUCKET)) {
+            return 5; // same as iron tools
+        }
+        if (isCopperArmor(stack)) return 1;
         boolean isEnchantable = stack.has(DataComponents.ENCHANTABLE);
         if (isEnchantable) {
             String itemName = stack.getDisplayName().getString().toLowerCase();
@@ -36,14 +41,25 @@ public class Utils {
 
     /** Experience points taken when crafting or smithing an item that has a level requirement. */
     public static int getCraftingExpCost(ItemStack stack) {
+        if (isCopperArmor(stack)) return 10;
         return getRequiredLevel(stack) * ModConstants.CRAFTING_EXP_COST_MODIFIER;
+    }
+
+    private static boolean isCopperArmor(ItemStack stack) {
+        return stack.is(Items.COPPER_HELMET) || stack.is(Items.COPPER_CHESTPLATE)
+                || stack.is(Items.COPPER_LEGGINGS) || stack.is(Items.COPPER_BOOTS);
     }
 
     /**
      * Crafting time in ticks: a base time plus a per-ingredient time. Gear (tools, weapons, armor)
-     * takes longer per ingredient the stronger its material is.
+     * takes longer per ingredient the stronger its material is. Higher level players craft faster.
      */
-    public static int getCraftingTicks(ItemStack result, int ingredients) {
+    public static int getCraftingTicks(Player player, ItemStack result, int ingredients) {
+        float speed = 1 + player.experienceLevel * ModConstants.CRAFTING_SPEED_PER_LEVEL;
+        return Math.round(getBaseCraftingTicks(result, ingredients) / speed);
+    }
+
+    private static int getBaseCraftingTicks(ItemStack result, int ingredients) {
         if (result.isEmpty()) return 0;
         int perIngredient = ModConstants.CRAFTING_TICKS_PER_INGREDIENT;
         if (result.has(DataComponents.ENCHANTABLE) || result.isDamageableItem()) {

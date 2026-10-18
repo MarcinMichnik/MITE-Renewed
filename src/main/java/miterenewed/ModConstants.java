@@ -17,6 +17,7 @@ public final class ModConstants {
     // Crafting time = base + ticks per ingredient; gear uses a per-ingredient time by material (see Utils.getCraftingTicks)
     public static final int CRAFTING_BASE_TICKS = 52;
     public static final int CRAFTING_TICKS_PER_INGREDIENT = 16;
+    public static final float CRAFTING_SPEED_PER_LEVEL = 0.02f; // time is divided by (1 + level * this): level 25 = 1.5x, level 50 = 2x faster
     public static final int TRADE_COST_MODIFIER = 10;
     public static final int REGEN_INTERVAL_TICKS = 1500;
     public static final float REGEN_AMOUNT = 1.0F;
