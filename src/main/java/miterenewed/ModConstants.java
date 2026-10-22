@@ -47,7 +47,7 @@ public final class ModConstants {
 
     public static final float BURNING_MOB_TREE_IGNITE_CHANCE = 0.002f; // per tick while a burning mob is within 1 block of logs/leaves (~5 s on average)
 
-    public static final float SEED_SATURATION = 0.5f; // saturation per seed or sugar eaten; they give no nutrition
+    public static final float SEED_SATURATION = 0.8f; // saturation per seed or sugar eaten; they give no nutrition
 
     // Tool durability (vanilla: wood 59, stone 131, copper 190); applies to all tools and swords of that material
     public static final int WOODEN_TOOL_DURABILITY = 8;
