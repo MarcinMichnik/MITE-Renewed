@@ -13,6 +13,7 @@ public final class ModConstants {
     public static final int MIN_DISTANCE_VILLAGE_GENERATION = 1000; // blocks from world origin
     public static final int MIN_DISTANCE_PILLAGER_OUTPOST_GENERATION = 1000; // blocks from world origin
     public static final int MIN_DISTANCE_LOOT_STRUCTURE_GENERATION = 1000; // camps, temples, shipwrecks, ruined portals...; blocks from world origin
+    public static final int MIN_DISTANCE_DANGEROUS_MOB_SPAWN = MIN_DISTANCE_VILLAGE_GENERATION; // natural zombie horsemen, witches, husks, drowned, bogged; blocks from world origin
     public static final int CRAFTING_EXP_COST_MODIFIER = 6; // exp points per required level
     // Crafting time = base + ticks per ingredient; gear uses a per-ingredient time by material (see Utils.getCraftingTicks)
     public static final int CRAFTING_BASE_TICKS = 52;
@@ -22,6 +23,7 @@ public final class ModConstants {
     public static final int REGEN_INTERVAL_TICKS = 1500;
     public static final float REGEN_AMOUNT = 1.0F;
     public static final float PASSIVE_EXHAUSTION = 0.001f;
+    public static final float RAIN_EXHAUSTION = 0.001f; // per tick on top of passive while rain falls directly on the player
     public static final float EXHAUSTION_ON_JUMP = 0.1f;
     public static final float EXHAUSTION_ON_SWING = 0.15f; // every attack swing, hit or miss (on top of vanilla 0.1 for a hit)
     public static final float EXHAUSTION_ON_BLOCK_BREAK = 0.1f; // on top of vanilla 0.005
@@ -49,10 +51,32 @@ public final class ModConstants {
 
     public static final float SEED_SATURATION = 0.8f; // saturation per seed or sugar eaten; they give no nutrition
 
-    // Tool durability (vanilla: wood 59, stone 131, copper 190); applies to all tools and swords of that material
+    // Tool durability (vanilla: wood 59, stone 131, copper 190, gold 32, iron 250, diamond 1561, netherite 2031); applies to all tools and swords of that material
     public static final int WOODEN_TOOL_DURABILITY = 8;
     public static final int STONE_TOOL_DURABILITY = 12;
     public static final int COPPER_TOOL_DURABILITY = 16;
+    public static final int GOLDEN_TOOL_DURABILITY = 24;
+    public static final int IRON_TOOL_DURABILITY = 36;
+    public static final int DIAMOND_TOOL_DURABILITY = 192;
+    public static final int NETHERITE_TOOL_DURABILITY = 256; // a third more than diamond
+
+    // Attack damage as shown in the tooltip (player base 1 included); attack speed stays vanilla
+    // Vanilla swords: wood 4, stone 5, copper 5, gold 4, iron 6, diamond 7, netherite 8
+    public static final float WOODEN_SWORD_DAMAGE = 4;
+    public static final float STONE_SWORD_DAMAGE = 5;
+    public static final float COPPER_SWORD_DAMAGE = 6;
+    public static final float GOLDEN_SWORD_DAMAGE = 6.5f; // slightly more than copper
+    public static final float IRON_SWORD_DAMAGE = 7;
+    public static final float DIAMOND_SWORD_DAMAGE = 8;
+    public static final float NETHERITE_SWORD_DAMAGE = 9;
+    // Vanilla axes: wood 7, stone 9, copper 9, gold 7, iron 9, diamond 9, netherite 10
+    public static final float WOODEN_AXE_DAMAGE = 5;
+    public static final float STONE_AXE_DAMAGE = 6;
+    public static final float COPPER_AXE_DAMAGE = 7;
+    public static final float GOLDEN_AXE_DAMAGE = 7.5f; // slightly more than copper
+    public static final float IRON_AXE_DAMAGE = 8;
+    public static final float DIAMOND_AXE_DAMAGE = 9;
+    public static final float NETHERITE_AXE_DAMAGE = 10;
 
     // XP dropped by coal ore and deepslate coal ore (vanilla 0-2)
     public static final int COAL_ORE_MIN_XP = 1;

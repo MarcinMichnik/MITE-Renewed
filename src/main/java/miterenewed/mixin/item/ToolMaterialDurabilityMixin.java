@@ -25,4 +25,28 @@ public class ToolMaterialDurabilityMixin {
     private static int miteCopperDurability(int original) {
         return ModConstants.COPPER_TOOL_DURABILITY;
     }
+
+    // Vanilla GOLD durability is 32
+    @ModifyConstant(method = "<clinit>", constant = @Constant(intValue = 32))
+    private static int miteGoldDurability(int original) {
+        return ModConstants.GOLDEN_TOOL_DURABILITY;
+    }
+
+    // Vanilla IRON durability is 250
+    @ModifyConstant(method = "<clinit>", constant = @Constant(intValue = 250))
+    private static int miteIronDurability(int original) {
+        return ModConstants.IRON_TOOL_DURABILITY;
+    }
+
+    // Vanilla DIAMOND durability is 1561
+    @ModifyConstant(method = "<clinit>", constant = @Constant(intValue = 1561))
+    private static int miteDiamondDurability(int original) {
+        return ModConstants.DIAMOND_TOOL_DURABILITY;
+    }
+
+    // Vanilla NETHERITE durability is 2031
+    @ModifyConstant(method = "<clinit>", constant = @Constant(intValue = 2031))
+    private static int miteNetheriteDurability(int original) {
+        return ModConstants.NETHERITE_TOOL_DURABILITY;
+    }
 }

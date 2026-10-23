@@ -22,6 +22,7 @@
 		"player.BlockPlaceExhaustionMixin",
 		"item.ModifyVanillaItemsMixin",
 		"item.ToolMaterialDurabilityMixin",
+		"item.WeaponDamageMixin",
 		"crafting.CraftingTimeMixin",
 		"crafting.CraftingResultLockMixin",
 		"crafting.CraftingRestartMixin",
@@ -52,7 +53,8 @@
 		"entity.zombie.NoBabyZombiesMixin",
 		"entity.zombie.ZombieDigTracker",
 		"entity.zombie.ClearBreakProgressOnRemoveMixin",
-		"world.StructureDistanceLimiterMixin"
+		"world.StructureDistanceLimiterMixin",
+		"world.MobSpawnDistanceLimiterMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

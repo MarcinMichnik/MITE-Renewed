@@ -14,7 +14,9 @@
 		"tooltip.ResultSlotTooltipMixin",
 		"tooltip.MiteRecipeBookTooltipMixin",
 		"tooltip.MerchantScreenAccessor",
-		"tooltip.MerchantResultTooltipMixin"
+		"tooltip.MerchantResultTooltipMixin",
+		"input.ToolRefillMixin",
+		"entity.ToolBreakTrackerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

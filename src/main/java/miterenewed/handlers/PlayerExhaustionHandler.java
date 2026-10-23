@@ -3,6 +3,7 @@ package miterenewed.handlers;
 import miterenewed.ModConstants;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import java.util.HashMap;
@@ -21,8 +22,18 @@ public class PlayerExhaustionHandler {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (!player.isCreative() && !player.isSpectator()) {
                 player.getFoodData().addExhaustion(ModConstants.PASSIVE_EXHAUSTION);
+                if (isInRain(player)) {
+                    player.getFoodData().addExhaustion(ModConstants.RAIN_EXHAUSTION);
+                }
             }
         }
+    }
+
+    // Same check as vanilla's private Entity.isInRain: rain (not snow) reaching the feet or the head
+    private static boolean isInRain(ServerPlayer player) {
+        BlockPos feet = player.blockPosition();
+        return player.level().isRainingAt(feet)
+            || player.level().isRainingAt(BlockPos.containing(feet.getX(), player.getBoundingBox().maxY, feet.getZ()));
     }
 
     private static void applyExhaustionOnJump(MinecraftServer server) {

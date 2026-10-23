@@ -8,14 +8,9 @@ import miterenewed.handlers.PlayerHealthRegenHandler;
 import miterenewed.handlers.PlayerHungerHandler;
 import miterenewed.handlers.PlayerProgressionHandler;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.gamerules.GameRules;
 import org.slf4j.Logger;
@@ -47,11 +42,6 @@ public class MITERenewed implements ModInitializer {
 		PlayerHungerHandler.init();
 		HostileMobAggressionHandler.init();
 		HostileMobCropHandler.init();
-
-		// No zombie horsemen: naturally spawned zombie horses always come with a spear-wielding zombie rider
-		BiomeModifications.create(Identifier.fromNamespaceAndPath(MOD_ID, "no_zombie_horsemen"))
-			.add(ModificationPhase.REMOVALS, BiomeSelectors.all(),
-				context -> context.getMobSpawnSettings().removeSpawnsOfEntityType(EntityTypes.ZOMBIE_HORSE));
 
 		// Safety net for baby zombies not prevented by NoBabyZombiesMixin (old saves, zombified baby villagers...)
 		ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
